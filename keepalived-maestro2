@@ -1,6 +1,16 @@
 #!/bin/bash
 # Script para configurar Keepalived en el Maestro 2 (Backup)
 
+# Pedir al usuario la dirección IP virtual
+echo "Ingrese la dirección IP virtual que tendra el servicio:"
+read virtual_ip
+
+# Verificar que el usuario haya ingresado una IP
+if [[ -z "$virtual_ip" ]]; then
+    echo "No se ha ingresado una IP. Saliendo..."
+    exit 1
+fi
+
 echo "Instalando Keepalived..."
 sudo apt update && sudo apt install -y keepalived
 
@@ -17,7 +27,7 @@ vrrp_instance TLHA {
         auth_pass thinlinc123
     }
     virtual_ipaddress {
-        192.168.115.200
+        $virtual_ip
     }
 }
 EOF
