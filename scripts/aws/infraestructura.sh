@@ -32,11 +32,11 @@ VPC_ID=$(aws ec2 create-vpc --cidr-block "10.0.0.0/16" --query 'Vpc.VpcId' --out
 aws ec2 create-tags --resources "$VPC_ID" --tags Key=Name,Value="vpc-proyecto-ivan"
 
 # Crear Subnet pública
-SUBNET_PUBLIC_ID=$(aws ec2 create-subnet --vpc-id "$VPC_ID" --cidr-block "10.0.200.0/24" --availability-zone "${REGION}a" --query 'Subnet.SubnetId' --output text)
+SUBNET_PUBLIC_ID=$(aws ec2 create-subnet --vpc-id "$VPC_ID" --cidr-block "10.0.1.0/24" --availability-zone "${REGION}a" --query 'Subnet.SubnetId' --output text)
 aws ec2 create-tags --resources "$SUBNET_PUBLIC_ID" --tags Key=Name,Value="subnet-publica-proyecto-ivan"
 
 # Crear Subnet privada
-SUBNET_PRIVATE_ID=$(aws ec2 create-subnet --vpc-id "$VPC_ID" --cidr-block "10.0.212.0/24" --availability-zone "${REGION}a" --query 'Subnet.SubnetId' --output text)
+SUBNET_PRIVATE_ID=$(aws ec2 create-subnet --vpc-id "$VPC_ID" --cidr-block "10.0.2.0/24" --availability-zone "${REGION}a" --query 'Subnet.SubnetId' --output text)
 aws ec2 create-tags --resources "$SUBNET_PRIVATE_ID" --tags Key=Name,Value="subnet-privada-proyecto-ivan"
 
 # Crear Internet Gateway
@@ -80,13 +80,13 @@ aws ec2 authorize-security-group-egress --group-id "$SG_WIREGUARD_ID" --protocol
 # Grupo de seguridad para LDAP
 SG_LDAP_ID=$(aws ec2 create-security-group --group-name "sg_ldap" --description "SG para LDAP" --vpc-id "$VPC_ID" --query 'GroupId' --output text)
 aws ec2 authorize-security-group-ingress --group-id "$SG_LDAP_ID" --protocol tcp --port 22 --cidr "0.0.0.0/0" # SSH
-aws ec2 authorize-security-group-ingress --group-id "$SG_LDAP_ID" --protocol tcp --port 389 --cidr "10.0.212.0/24" # LDAP
+aws ec2 authorize-security-group-ingress --group-id "$SG_LDAP_ID" --protocol tcp --port 389 --cidr "10.0.2.0/24" # LDAP
 aws ec2 authorize-security-group-egress --group-id "$SG_LDAP_ID" --protocol -1 --port all --cidr "0.0.0.0/0"
 
 # Grupo de seguridad para ThinLinc
 SG_THINLINC_ID=$(aws ec2 create-security-group --group-name "sg_thinlinc" --description "SG para ThinLinc" --vpc-id "$VPC_ID" --query 'GroupId' --output text)
 aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 22 --cidr "0.0.0.0/0" # SSH
-aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 5901-5999 --cidr "10.0.212.0/24" # ThinLinc
+aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 5901-5999 --cidr "10.0.2.0/24" # ThinLinc
 aws ec2 authorize-security-group-egress --group-id "$SG_THINLINC_ID" --protocol -1 --port all --cidr "0.0.0.0/0"
 
 ###########################################
@@ -97,7 +97,7 @@ aws ec2 authorize-security-group-egress --group-id "$SG_THINLINC_ID" --protocol 
 INSTANCE_NAME="wireguard-vpn"
 SUBNET_ID="$SUBNET_PUBLIC_ID"
 SECURITY_GROUP_ID="$SG_WIREGUARD_ID"
-PRIVATE_IP="10.0.200.10"
+PRIVATE_IP="10.0.1.10"
 INSTANCE_TYPE="t2.micro"
 VOLUME_SIZE=8
 
@@ -116,7 +116,7 @@ echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 INSTANCE_NAME="LDAP"
 SUBNET_ID="$SUBNET_PRIVATE_ID"
 SECURITY_GROUP_ID="$SG_LDAP_ID"
-PRIVATE_IP="10.0.212.30"
+PRIVATE_IP="10.0.2.30"
 
 INSTANCE_ID=$(aws ec2 run-instances \
     --image-id "$AMI_ID" \
@@ -131,7 +131,7 @@ echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 
 # Instancia para ThinLinc Agente1
 INSTANCE_NAME="agente1"
-PRIVATE_IP="10.0.212.21"
+PRIVATE_IP="10.0.2.21"
 SECURITY_GROUP_ID="$SG_THINLINC_ID"
 
 INSTANCE_ID=$(aws ec2 run-instances \
@@ -147,7 +147,7 @@ echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 
 # Instancia para ThinLinc Agente2
 INSTANCE_NAME="agente2"
-PRIVATE_IP="10.0.212.22"
+PRIVATE_IP="10.0.2.22"
 
 INSTANCE_ID=$(aws ec2 run-instances \
     --image-id "$AMI_ID" \
@@ -162,7 +162,7 @@ echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 
 # Instancia para ThinLinc Maestro1
 INSTANCE_NAME="maestro1"
-PRIVATE_IP="10.0.212.11"
+PRIVATE_IP="10.0.2.11"
 
 INSTANCE_ID=$(aws ec2 run-instances \
     --image-id "$AMI_ID" \
@@ -177,7 +177,7 @@ echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 
 # Instancia para ThinLinc Maestro2
 INSTANCE_NAME="maestro2"
-PRIVATE_IP="10.0.212.12"
+PRIVATE_IP="10.0.2.12"
 
 INSTANCE_ID=$(aws ec2 run-instances \
     --image-id "$AMI_ID" \
