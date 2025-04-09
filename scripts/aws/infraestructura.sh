@@ -23,6 +23,14 @@ echo "${PEM_KEY}" > "${KEY_NAME}.pem"
 chmod 400 "${KEY_NAME}.pem"
 echo "Clave SSH creada y almacenada en: ${KEY_NAME}.pem"
 
+# Script de APPDATA para instalar unzip y git
+USER_DATA=$(base64 <<EOF
+#!/bin/bash
+apt update
+apt install -y unzip git
+EOF
+)
+
 ###########################################
 #                 VPC                     #
 ###########################################
@@ -108,6 +116,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
     --network-interfaces "SubnetId=$SUBNET_ID,AssociatePublicIpAddress=true,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
+    --user-data "$USER_DATA" \
     --query "Instances[0].InstanceId" \
     --output text)
 echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
@@ -125,6 +134,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
     --network-interfaces "SubnetId=$SUBNET_ID,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
+    --user-data "$USER_DATA" \
     --query "Instances[0].InstanceId" \
     --output text)
 echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
@@ -141,6 +151,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
     --network-interfaces "SubnetId=$SUBNET_PRIVATE_ID,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
+    --user-data "$USER_DATA" \
     --query "Instances[0].InstanceId" \
     --output text)
 echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
@@ -156,6 +167,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
     --network-interfaces "SubnetId=$SUBNET_PRIVATE_ID,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
+    --user-data "$USER_DATA" \
     --query "Instances[0].InstanceId" \
     --output text)
 echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
@@ -171,6 +183,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
     --network-interfaces "SubnetId=$SUBNET_PRIVATE_ID,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
+    --user-data "$USER_DATA" \
     --query "Instances[0].InstanceId" \
     --output text)
 echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
@@ -186,6 +199,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
     --network-interfaces "SubnetId=$SUBNET_PRIVATE_ID,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
+    --user-data "$USER_DATA" \
     --query "Instances[0].InstanceId" \
     --output text)
 echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
