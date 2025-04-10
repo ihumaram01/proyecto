@@ -18,7 +18,7 @@ echo "Creando archivo de configuración para Maestro 1..."
 cat <<EOF | sudo tee /etc/keepalived/keepalived.conf
 vrrp_instance TLHA {
     state MASTER
-    interface ens18
+    interface ens5
     virtual_router_id 51
     priority 150
     advert_int 1
