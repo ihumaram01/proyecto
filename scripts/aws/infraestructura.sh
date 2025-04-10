@@ -170,7 +170,7 @@ hostnamectl set-hostname $HOSTNAME
 cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
-sudo chmod +x /home/ubuntu/proyecto/scripts/ldap-server.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-server.sh
 EOF
 )
 
@@ -203,8 +203,8 @@ hostnamectl set-hostname $HOSTNAME
 cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
-sudo chmod +x /home/ubuntu/proyecto/scripts/ldap-cliente.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/tlagente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/thinlinc/tlagente.sh
 EOF
 )
 
@@ -235,8 +235,8 @@ hostnamectl set-hostname $HOSTNAME
 cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
-sudo chmod +x /home/ubuntu/proyecto/scripts/ldap-cliente.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/tlagente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/thinlinc/tlagente.sh
 EOF
 )
 
@@ -269,8 +269,8 @@ git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >>
 chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/keepalived-maestro1.sh
 sudo ./home/ubuntu/proyecto/scripts/aws/keepalived-maestro1.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/ldap-cliente.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/tlmaestro.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/thinlinc/tlmaestro.sh
 EOF
 )
 
@@ -303,8 +303,8 @@ git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >>
 chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/keepalived-maestro2.sh
 sudo ./home/ubuntu/proyecto/scripts/aws/keepalived-maestro2.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/ldap-cliente.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/tlmaestro.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/thinlinc/tlmaestro.sh
 EOF
 )
 
