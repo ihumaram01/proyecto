@@ -8,9 +8,15 @@ exec > "$LOG_FILE" 2>&1
 
 # Variables VPC
 REGION="us-east-1"
+
 # Variables AMI-ID (Ubuntu server 24.04) y CLAVE SSH
 KEY_NAME="ssh-proyecto-ivan"
 AMI_ID="ami-04b4f1a9cf54c11d0" # Ubuntu Server 24.04
+
+# Tipo de instancia y tamaño del disco
+INSTANCE_TYPE="t3.micro"
+VOLUME_SIZE=30
+
 
 # Crear par de claves SSH y almacenar la clave en una variable
 PEM_KEY=$(aws ec2 create-key-pair \
