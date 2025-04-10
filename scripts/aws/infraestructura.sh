@@ -65,10 +65,18 @@ echo "Creando NAT Gateway y tabla de rutas privadas..."
 
 # Crear Elastic IP y NAT Gateway
 EIP_ID=$(aws ec2 allocate-address --query 'AllocationId' --output text)
-NAT_ID=$(aws ec2 create-nat-gateway --subnet-id "$SUBNET_PUBLIC_ID" --allocation-id "$EIP_ID" --query 'NatGateway.NatGatewayId' --output text)
+NAT_ID=$(aws ec2 create-nat-gateway \
+    --subnet-id "$SUBNET_PUBLIC_ID" \
+    --allocation-id "$EIP_ID" \
+    --query 'NatGateway.NatGatewayId' \
+    --output text)
 
+# Esperar hasta que el NAT Gateway esté disponible
 while true; do
-    STATUS=$(aws ec2 describe-nat-gateways --nat-gateway-ids "$NAT_ID" --query 'NatGateways[0].State' --output text)
+    STATUS=$(aws ec2 describe-nat-gateways \
+        --nat-gateway-ids "$NAT_ID" \
+        --query 'NatGateways[0].State' \
+        --output text 2>/dev/null)
     echo "Estado del NAT Gateway: $STATUS"
     if [ "$STATUS" == "available" ]; then
         break
