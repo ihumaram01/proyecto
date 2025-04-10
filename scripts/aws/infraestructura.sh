@@ -137,7 +137,7 @@ hostnamectl set-hostname $HOSTNAME
 cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
-sudo chmod +x /proyecto/scripts/wireguard.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/wireguard.sh
 EOF
 )
 
