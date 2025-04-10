@@ -133,7 +133,7 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
-git clone http://github.com/ihumaram01/proyecto.git
+git clone https://github.com/ihumaram01/proyecto.git
 sudo chmod +x /proyecto/scripts/wireguard.sh
 EOF
 )
@@ -164,7 +164,7 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
-git clone http://github.com/ihumaram01/proyecto.git
+git clone https://github.com/ihumaram01/proyecto.git
 sudo chmod +x /proyecto/scripts/ldap-server.sh
 EOF
 )
@@ -195,7 +195,7 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
-git clone http://github.com/ihumaram01/proyecto.git
+git clone https://github.com/ihumaram01/proyecto.git
 sudo chmod +x /proyecto/scripts/ldap-cliente.sh
 sudo chmod +x /proyecto/scripts/tlagente.sh
 EOF
@@ -225,7 +225,7 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
-git clone http://github.com/ihumaram01/proyecto.git
+git clone https://github.com/ihumaram01/proyecto.git
 sudo chmod +x /proyecto/scripts/ldap-cliente.sh
 sudo chmod +x /proyecto/scripts/tlagente.sh
 EOF
@@ -255,7 +255,7 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
-git clone http://github.com/ihumaram01/proyecto.git
+git clone https://github.com/ihumaram01/proyecto.git
 sudo chmod +x /proyecto/scripts/aws/keepalived-maestro1.sh
 sudo ./proyecto/scripts/aws/keepalived-maestro1.sh
 sudo chmod +x /proyecto/scripts/ldap-cliente.sh
@@ -287,7 +287,7 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
-git clone http://github.com/ihumaram01/proyecto.git
+git clone https://github.com/ihumaram01/proyecto.git
 sudo chmod +x /proyecto/scripts/aws/keepalived-maestro2.sh
 sudo ./proyecto/scripts/aws/keepalived-maestro2.sh
 sudo chmod +x /proyecto/scripts/ldap-cliente.sh
