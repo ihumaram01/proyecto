@@ -134,6 +134,7 @@ apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
 git clone http://github.com/ihumaram01/proyecto.git
+sudo chmod +x /proyecto/scripts/wireguard.sh
 EOF
 )
 
@@ -164,6 +165,7 @@ apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
 git clone http://github.com/ihumaram01/proyecto.git
+sudo chmod +x /proyecto/scripts/ldap-server.sh
 EOF
 )
 
@@ -194,6 +196,8 @@ apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
 git clone http://github.com/ihumaram01/proyecto.git
+sudo chmod +x /proyecto/scripts/ldap-cliente.sh
+sudo chmod +x /proyecto/scripts/tlagente.sh
 EOF
 )
 
@@ -222,6 +226,8 @@ apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
 git clone http://github.com/ihumaram01/proyecto.git
+sudo chmod +x /proyecto/scripts/ldap-cliente.sh
+sudo chmod +x /proyecto/scripts/tlagente.sh
 EOF
 )
 
@@ -250,8 +256,10 @@ apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
 git clone http://github.com/ihumaram01/proyecto.git
-sudo chmod +x keepalived-maestro1.sh
-sudo ./keepalived-maestro1.sh
+sudo chmod +x /proyecto/scripts/keepalived-maestro1.sh
+sudo ./proyecto/scripts/keepalived-maestro1.sh
+sudo chmod +x /proyecto/scripts/ldap-cliente.sh
+sudo chmod +x /proyecto/scripts/tlmaestro.sh
 EOF
 )
 
@@ -280,8 +288,10 @@ apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
 git clone http://github.com/ihumaram01/proyecto.git
-sudo chmod +x keepalived-maestro2.sh
-sudo ./keepalived-maestro2.sh
+sudo chmod +x /proyecto/scripts/keepalived-maestro2.sh
+sudo ./proyecto/scripts/keepalived-maestro2.sh
+sudo chmod +x /proyecto/scripts/ldap-cliente.sh
+sudo chmod +x /proyecto/scripts/tlmaestro.sh
 EOF
 )
 
