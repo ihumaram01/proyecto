@@ -1,3 +1,5 @@
+echo "==================== INICIO DEL SCRIPT ===================="
+
 # ARCHIVO DE LOG
 LOG_FILE="laboratorio.log"
 #exec > "$LOG_FILE" 2>&1
@@ -17,6 +19,7 @@ AMI_ID="ami-04b4f1a9cf54c11d0" # Ubuntu Server 24.04
 INSTANCE_TYPE="t3.micro"
 VOLUME_SIZE=30
 
+echo "Creando clave SSH..."
 
 # Crear par de claves SSH y almacenar la clave en una variable
 PEM_KEY=$(aws ec2 create-key-pair \
@@ -33,6 +36,8 @@ echo "Clave SSH creada y almacenada en: ${KEY_NAME}.pem"
 #                 VPC                     #
 ###########################################
 
+echo "Creando VPC y subredes..."
+
 # Crear VPC
 VPC_ID=$(aws ec2 create-vpc --cidr-block "10.0.0.0/16" --query 'Vpc.VpcId' --output text)
 aws ec2 create-tags --resources "$VPC_ID" --tags Key=Name,Value="vpc-proyecto-ivan"
@@ -45,6 +50,8 @@ aws ec2 create-tags --resources "$SUBNET_PUBLIC_ID" --tags Key=Name,Value="subne
 SUBNET_PRIVATE_ID=$(aws ec2 create-subnet --vpc-id "$VPC_ID" --cidr-block "10.0.2.0/24" --availability-zone "${REGION}a" --query 'Subnet.SubnetId' --output text)
 aws ec2 create-tags --resources "$SUBNET_PRIVATE_ID" --tags Key=Name,Value="subnet-privada-proyecto-ivan"
 
+echo "Creando Internet Gateway y tabla de rutas públicas..."
+
 # Crear Internet Gateway
 IGW_ID=$(aws ec2 create-internet-gateway --query 'InternetGateway.InternetGatewayId' --output text)
 aws ec2 attach-internet-gateway --vpc-id "$VPC_ID" --internet-gateway-id "$IGW_ID"
@@ -54,11 +61,12 @@ RTB_PUBLIC_ID=$(aws ec2 create-route-table --vpc-id "$VPC_ID" --query 'RouteTabl
 aws ec2 create-route --route-table-id "$RTB_PUBLIC_ID" --destination-cidr-block "0.0.0.0/0" --gateway-id "$IGW_ID"
 aws ec2 associate-route-table --subnet-id "$SUBNET_PUBLIC_ID" --route-table-id "$RTB_PUBLIC_ID"
 
+echo "Creando NAT Gateway y tabla de rutas privadas..."
+
 # Crear Elastic IP y NAT Gateway
 EIP_ID=$(aws ec2 allocate-address --query 'AllocationId' --output text)
 NAT_ID=$(aws ec2 create-nat-gateway --subnet-id "$SUBNET_PUBLIC_ID" --allocation-id "$EIP_ID" --query 'NatGateway.NatGatewayId' --output text)
 
-echo "Creando GATEWAY NAT..."
 while true; do
     STATUS=$(aws ec2 describe-nat-gateways --nat-gateway-ids "$NAT_ID" --query 'NatGateways[0].State' --output text)
     echo "Estado del NAT Gateway: $STATUS"
@@ -76,6 +84,8 @@ aws ec2 associate-route-table --subnet-id "$SUBNET_PRIVATE_ID" --route-table-id 
 ###########################################
 #         GRUPOS DE SEGURIDAD             #
 ###########################################
+
+echo "Creando Grupos de Seguridad..."
 
 # Grupo de seguridad para WireGuard VPN
 SG_WIREGUARD_ID=$(aws ec2 create-security-group --group-name "sg_wireguard" --description "SG para WireGuard VPN" --vpc-id "$VPC_ID" --query 'GroupId' --output text)
@@ -98,6 +108,10 @@ aws ec2 authorize-security-group-egress --group-id "$SG_THINLINC_ID" --protocol 
 ###########################################
 #         INSTANCIAS EC2                  #
 ###########################################
+
+echo "Lanzando instancias EC2..."
+
+echo "  Lanzando VPN WireGuard..."
 
 # Instancia para WireGuard VPN
 INSTANCE_NAME="VPNWireguard"
@@ -126,6 +140,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --output text)
 echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 
+echo "  Lanzando LDAP..."
 
 # Instancia para LDAP
 INSTANCE_NAME="LDAP"
@@ -155,6 +170,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --output text)
 echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 
+echo "  Lanzando ThinLinc Agente1..."
 
 # Instancia para ThinLinc Agente1
 INSTANCE_NAME="ThinLincAgente1"
@@ -182,6 +198,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --output text)
 echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 
+echo "  Lanzando ThinLinc Agente2..."
 
 # Instancia para ThinLinc Agente2
 INSTANCE_NAME="ThinLincAgente2"
@@ -208,6 +225,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --output text)
 echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 
+echo "  Lanzando ThinLinc Maestro1..."
 
 # Instancia para ThinLinc Maestro1
 INSTANCE_NAME="ThinLincMaestro1"
@@ -234,6 +252,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --output text)
 echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 
+echo "  Lanzando ThinLinc Maestro2..."
 
 # Instancia para ThinLinc Maestro2
 INSTANCE_NAME="ThinLincMaestro2"
@@ -259,3 +278,4 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --query "Instances[0].InstanceId" \
     --output text)
 echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
+echo "✅ Infraestructura desplegada correctamente."
