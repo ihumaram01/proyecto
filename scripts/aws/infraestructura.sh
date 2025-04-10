@@ -130,6 +130,7 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
+git clone http://github.com/ihumaram01/proyecto.git
 EOF
 )
 
@@ -159,6 +160,7 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
+git clone http://github.com/ihumaram01/proyecto.git
 EOF
 )
 
@@ -188,6 +190,7 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
+git clone http://github.com/ihumaram01/proyecto.git
 EOF
 )
 
@@ -215,6 +218,7 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
+git clone http://github.com/ihumaram01/proyecto.git
 EOF
 )
 
@@ -242,6 +246,9 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
+git clone http://github.com/ihumaram01/proyecto.git
+sudo chmod +x keepalived-maestro1.sh
+sudo ./keepalived-maestro1.sh
 EOF
 )
 
@@ -269,6 +276,9 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
+git clone http://github.com/ihumaram01/proyecto.git
+sudo chmod +x keepalived-maestro2.sh
+sudo ./keepalived-maestro2.sh
 EOF
 )
 
