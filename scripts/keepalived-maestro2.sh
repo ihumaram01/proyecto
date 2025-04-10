@@ -2,8 +2,7 @@
 # Script para configurar Keepalived en el Maestro 2 (Backup)
 
 # Pedir al usuario la dirección IP virtual
-echo "Ingrese la dirección IP virtual que tendra el servicio:"
-read virtual_ip
+read -p "Ingrese la dirección IP virtual que tendra el servicio:" virtual_ip
 
 # Verificar que el usuario haya ingresado una IP
 if [[ -z "$virtual_ip" ]]; then

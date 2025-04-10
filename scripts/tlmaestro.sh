@@ -4,8 +4,7 @@
 CONFIG_FILE="/opt/thinlinc/etc/conf.d/vsmserver.hconf"
 
 # Solicitar al usuario las IPs de los servidores maestros
-echo "Ingresa las IPs de los agentes separadas por espacio (ejemplo: 192.168.1.1 192.168.1.2):"
-read AGENT_IPS
+read -p "Ingresa las IPs de los agentes separadas por espacio (ejemplo: 192.168.1.1 192.168.1.2): " AGENT_IPS
 
 # Cambiar max_sessions_per_user de 1 a 0
 sed -i 's/^max_sessions_per_user=1/max_sessions_per_user=0/' $CONFIG_FILE
