@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # ARCHIVO DE LOG
 LOG_FILE="laboratorio.log"
 exec > "$LOG_FILE" 2>&1
@@ -73,61 +71,184 @@ aws ec2 associate-route-table --subnet-id "$SUBNET_PRIVATE_ID" --route-table-id 
 #         GRUPOS DE SEGURIDAD             #
 ###########################################
 
-# WireGuard
+# Grupo de seguridad para WireGuard VPN
 SG_WIREGUARD_ID=$(aws ec2 create-security-group --group-name "sg_wireguard" --description "SG para WireGuard VPN" --vpc-id "$VPC_ID" --query 'GroupId' --output text)
 aws ec2 authorize-security-group-ingress --group-id "$SG_WIREGUARD_ID" --protocol udp --port 51820 --cidr "0.0.0.0/0"
 aws ec2 authorize-security-group-ingress --group-id "$SG_WIREGUARD_ID" --protocol tcp --port 22 --cidr "0.0.0.0/0"
 aws ec2 authorize-security-group-egress --group-id "$SG_WIREGUARD_ID" --protocol -1 --port all --cidr "0.0.0.0/0"
 
-# LDAP
+# Grupo de seguridad para LDAP
 SG_LDAP_ID=$(aws ec2 create-security-group --group-name "sg_ldap" --description "SG para LDAP" --vpc-id "$VPC_ID" --query 'GroupId' --output text)
-aws ec2 authorize-security-group-ingress --group-id "$SG_LDAP_ID" --protocol tcp --port 22 --cidr "0.0.0.0/0"
-aws ec2 authorize-security-group-ingress --group-id "$SG_LDAP_ID" --protocol tcp --port 389 --cidr "10.0.2.0/24"
+aws ec2 authorize-security-group-ingress --group-id "$SG_LDAP_ID" --protocol tcp --port 22 --cidr "0.0.0.0/0" # SSH
+aws ec2 authorize-security-group-ingress --group-id "$SG_LDAP_ID" --protocol tcp --port 389 --cidr "10.0.2.0/24" # LDAP
 aws ec2 authorize-security-group-egress --group-id "$SG_LDAP_ID" --protocol -1 --port all --cidr "0.0.0.0/0"
 
-# ThinLinc
+# Grupo de seguridad para ThinLinc
 SG_THINLINC_ID=$(aws ec2 create-security-group --group-name "sg_thinlinc" --description "SG para ThinLinc" --vpc-id "$VPC_ID" --query 'GroupId' --output text)
-aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 22 --cidr "0.0.0.0/0"
-aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 5901-5999 --cidr "10.0.2.0/24"
+aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 22 --cidr "0.0.0.0/0" # SSH
+aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 5901-5999 --cidr "10.0.2.0/24" # ThinLinc
 aws ec2 authorize-security-group-egress --group-id "$SG_THINLINC_ID" --protocol -1 --port all --cidr "0.0.0.0/0"
 
 ###########################################
-#         INSTANCIAS EC2 CON APPDATA      #
+#         INSTANCIAS EC2                  #
 ###########################################
 
-crear_instancia() {
-    INSTANCE_NAME=$1
-    SUBNET_ID=$2
-    SECURITY_GROUP_ID=$3
-    PRIVATE_IP=$4
+# Instancia para WireGuard VPN
+INSTANCE_NAME="VPNWireguard"
+SUBNET_ID="$SUBNET_PUBLIC_ID"
+SECURITY_GROUP_ID="$SG_WIREGUARD_ID"
+PRIVATE_IP="10.0.1.10"
 
-    export HOSTNAME=$INSTANCE_NAME
-    USER_DATA=$(cat <<EOF | envsubst | base64
+HOSTNAME="$INSTANCE_NAME"
+USER_DATA=$(base64 <<EOF
 #!/bin/bash
 apt update
 apt install -y unzip git
-hostnamectl set-hostname \$HOSTNAME
+hostnamectl set-hostname $HOSTNAME
 EOF
 )
 
-    INSTANCE_ID=$(aws ec2 run-instances \
-        --image-id "$AMI_ID" \
-        --instance-type "t2.micro" \
-        --key-name "$KEY_NAME" \
-        --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=8,VolumeType=gp3,DeleteOnTermination=true}" \
-        --network-interfaces "SubnetId=$SUBNET_ID,AssociatePublicIpAddress=true,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
-        --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
-        --user-data "$USER_DATA" \
-        --query "Instances[0].InstanceId" \
-        --output text)
-    
-    echo "$INSTANCE_NAME creada: $INSTANCE_ID"
-}
+INSTANCE_ID=$(aws ec2 run-instances \
+    --image-id "$AMI_ID" \
+    --instance-type "$INSTANCE_TYPE" \
+    --key-name "$KEY_NAME" \
+    --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
+    --network-interfaces "SubnetId=$SUBNET_ID,AssociatePublicIpAddress=true,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
+    --user-data "$USER_DATA" \
+    --query "Instances[0].InstanceId" \
+    --output text)
+echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 
-# Llamadas a la función para cada instancia
-crear_instancia "VPNWireguard" "$SUBNET_PUBLIC_ID" "$SG_WIREGUARD_ID" "10.0.1.10"
-crear_instancia "LDAP" "$SUBNET_PRIVATE_ID" "$SG_LDAP_ID" "10.0.2.30"
-crear_instancia "ThinLincAgente1" "$SUBNET_PRIVATE_ID" "$SG_THINLINC_ID" "10.0.2.21"
-crear_instancia "ThinLincAgente2" "$SUBNET_PRIVATE_ID" "$SG_THINLINC_ID" "10.0.2.22"
-crear_instancia "ThinLincMaestro1" "$SUBNET_PRIVATE_ID" "$SG_THINLINC_ID" "10.0.2.11"
-crear_instancia "ThinLincMaestro2" "$SUBNET_PRIVATE_ID" "$SG_THINLINC_ID" "10.0.2.12"
+
+# Instancia para LDAP
+INSTANCE_NAME="LDAP"
+SUBNET_ID="$SUBNET_PRIVATE_ID"
+SECURITY_GROUP_ID="$SG_LDAP_ID"
+PRIVATE_IP="10.0.2.30"
+
+HOSTNAME="$INSTANCE_NAME"
+USER_DATA=$(base64 <<EOF
+#!/bin/bash
+apt update
+apt install -y unzip git
+hostnamectl set-hostname $HOSTNAME
+EOF
+)
+
+INSTANCE_ID=$(aws ec2 run-instances \
+    --image-id "$AMI_ID" \
+    --instance-type "$INSTANCE_TYPE" \
+    --key-name "$KEY_NAME" \
+    --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
+    --network-interfaces "SubnetId=$SUBNET_ID,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
+    --user-data "$USER_DATA" \
+    --query "Instances[0].InstanceId" \
+    --output text)
+echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
+
+
+# Instancia para ThinLinc Agente1
+INSTANCE_NAME="ThinLincAgente1"
+PRIVATE_IP="10.0.2.21"
+SECURITY_GROUP_ID="$SG_THINLINC_ID"
+
+HOSTNAME="$INSTANCE_NAME"
+USER_DATA=$(base64 <<EOF
+#!/bin/bash
+apt update
+apt install -y unzip git
+hostnamectl set-hostname $HOSTNAME
+EOF
+)
+
+INSTANCE_ID=$(aws ec2 run-instances \
+    --image-id "$AMI_ID" \
+    --instance-type "$INSTANCE_TYPE" \
+    --key-name "$KEY_NAME" \
+    --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
+    --network-interfaces "SubnetId=$SUBNET_PRIVATE_ID,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
+    --user-data "$USER_DATA" \
+    --query "Instances[0].InstanceId" \
+    --output text)
+echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
+
+
+# Instancia para ThinLinc Agente2
+INSTANCE_NAME="ThinLincAgente2"
+PRIVATE_IP="10.0.2.22"
+
+HOSTNAME="$INSTANCE_NAME"
+USER_DATA=$(base64 <<EOF
+#!/bin/bash
+apt update
+apt install -y unzip git
+hostnamectl set-hostname $HOSTNAME
+EOF
+)
+
+INSTANCE_ID=$(aws ec2 run-instances \
+    --image-id "$AMI_ID" \
+    --instance-type "$INSTANCE_TYPE" \
+    --key-name "$KEY_NAME" \
+    --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
+    --network-interfaces "SubnetId=$SUBNET_PRIVATE_ID,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
+    --user-data "$USER_DATA" \
+    --query "Instances[0].InstanceId" \
+    --output text)
+echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
+
+
+# Instancia para ThinLinc Maestro1
+INSTANCE_NAME="ThinLincMaestro1"
+PRIVATE_IP="10.0.2.11"
+
+HOSTNAME="$INSTANCE_NAME"
+USER_DATA=$(base64 <<EOF
+#!/bin/bash
+apt update
+apt install -y unzip git
+hostnamectl set-hostname $HOSTNAME
+EOF
+)
+
+INSTANCE_ID=$(aws ec2 run-instances \
+    --image-id "$AMI_ID" \
+    --instance-type "$INSTANCE_TYPE" \
+    --key-name "$KEY_NAME" \
+    --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
+    --network-interfaces "SubnetId=$SUBNET_PRIVATE_ID,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
+    --user-data "$USER_DATA" \
+    --query "Instances[0].InstanceId" \
+    --output text)
+echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
+
+
+# Instancia para ThinLinc Maestro2
+INSTANCE_NAME="ThinLincMaestro2"
+PRIVATE_IP="10.0.2.12"
+
+HOSTNAME="$INSTANCE_NAME"
+USER_DATA=$(base64 <<EOF
+#!/bin/bash
+apt update
+apt install -y unzip git
+hostnamectl set-hostname $HOSTNAME
+EOF
+)
+
+INSTANCE_ID=$(aws ec2 run-instances \
+    --image-id "$AMI_ID" \
+    --instance-type "$INSTANCE_TYPE" \
+    --key-name "$KEY_NAME" \
+    --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
+    --network-interfaces "SubnetId=$SUBNET_PRIVATE_ID,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
+    --user-data "$USER_DATA" \
+    --query "Instances[0].InstanceId" \
+    --output text)
+echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
