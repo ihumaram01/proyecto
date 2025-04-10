@@ -105,8 +105,8 @@ SUBNET_ID="$SUBNET_PUBLIC_ID"
 SECURITY_GROUP_ID="$SG_WIREGUARD_ID"
 PRIVATE_IP="10.0.1.10"
 
-HOSTNAME="$INSTANCE_NAME"
-USER_DATA=$(base64 <<EOF
+HOSTNAME="VPNWireguard"
+USER_DATA=$(cat <<EOF
 #!/bin/bash
 apt update
 apt install -y unzip git
@@ -133,14 +133,15 @@ SUBNET_ID="$SUBNET_PRIVATE_ID"
 SECURITY_GROUP_ID="$SG_LDAP_ID"
 PRIVATE_IP="10.0.2.30"
 
-HOSTNAME="$INSTANCE_NAME"
-USER_DATA=$(base64 <<EOF
+HOSTNAME="LDAP"
+USER_DATA=$(cat <<EOF
 #!/bin/bash
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
 EOF
 )
+
 
 INSTANCE_ID=$(aws ec2 run-instances \
     --image-id "$AMI_ID" \
@@ -160,8 +161,8 @@ INSTANCE_NAME="ThinLincAgente1"
 PRIVATE_IP="10.0.2.21"
 SECURITY_GROUP_ID="$SG_THINLINC_ID"
 
-HOSTNAME="$INSTANCE_NAME"
-USER_DATA=$(base64 <<EOF
+HOSTNAME="ThinLincAgente1"
+USER_DATA=$(cat <<EOF
 #!/bin/bash
 apt update
 apt install -y unzip git
@@ -186,8 +187,8 @@ echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 INSTANCE_NAME="ThinLincAgente2"
 PRIVATE_IP="10.0.2.22"
 
-HOSTNAME="$INSTANCE_NAME"
-USER_DATA=$(base64 <<EOF
+HOSTNAME="ThinLincAgente2"
+USER_DATA=$(cat <<EOF
 #!/bin/bash
 apt update
 apt install -y unzip git
@@ -212,8 +213,8 @@ echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 INSTANCE_NAME="ThinLincMaestro1"
 PRIVATE_IP="10.0.2.11"
 
-HOSTNAME="$INSTANCE_NAME"
-USER_DATA=$(base64 <<EOF
+HOSTNAME="ThinLincMaestro1"
+USER_DATA=$(cat <<EOF
 #!/bin/bash
 apt update
 apt install -y unzip git
@@ -238,8 +239,8 @@ echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 INSTANCE_NAME="ThinLincMaestro2"
 PRIVATE_IP="10.0.2.12"
 
-HOSTNAME="$INSTANCE_NAME"
-USER_DATA=$(base64 <<EOF
+HOSTNAME="ThinLincMaestro2"
+USER_DATA=$(cat <<EOF
 #!/bin/bash
 apt update
 apt install -y unzip git
