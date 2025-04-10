@@ -7,7 +7,7 @@ SERVER_PRIV_KEY="$WG_DIR/server_private.key"
 SERVER_PUB_KEY="$WG_DIR/server_public.key"
 SERVER_IP="10.0.3.1/24"
 PORT="51820"
-NET_IFACE="eth0"  # Cambia esto si tu interfaz no es eth0
+NET_IFACE="ens5"  
 DNS_SERVER="1.1.1.1"
 
 # Instalar paquetes necesarios
