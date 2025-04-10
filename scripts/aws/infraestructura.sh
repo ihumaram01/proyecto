@@ -1,6 +1,6 @@
 # ARCHIVO DE LOG
 LOG_FILE="laboratorio.log"
-exec > "$LOG_FILE" 2>&1
+#exec > "$LOG_FILE" 2>&1
 
 ###########################################
 #            VARIABLES DE PRUEBA          #
