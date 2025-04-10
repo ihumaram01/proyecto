@@ -130,8 +130,9 @@ PRIVATE_IP="10.0.1.10"
 HOSTNAME="VPNWireguard"
 USER_DATA=$(cat <<EOF
 #!/bin/bash
-apt update
-apt install -y unzip git
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+sudo apt update
+sudo apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
 git clone https://github.com/ihumaram01/proyecto.git
 sudo chmod +x /proyecto/scripts/wireguard.sh
