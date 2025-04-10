@@ -167,8 +167,10 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
-git clone https://github.com/ihumaram01/proyecto.git
-sudo chmod +x /proyecto/scripts/ldap-server.sh
+cd /home/ubuntu
+git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
+chown -R ubuntu:ubuntu proyecto
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap-server.sh
 EOF
 )
 
@@ -198,9 +200,11 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
-git clone https://github.com/ihumaram01/proyecto.git
-sudo chmod +x /proyecto/scripts/ldap-cliente.sh
-sudo chmod +x /proyecto/scripts/tlagente.sh
+cd /home/ubuntu
+git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
+chown -R ubuntu:ubuntu proyecto
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap-cliente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/tlagente.sh
 EOF
 )
 
@@ -228,9 +232,11 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
-git clone https://github.com/ihumaram01/proyecto.git
-sudo chmod +x /proyecto/scripts/ldap-cliente.sh
-sudo chmod +x /proyecto/scripts/tlagente.sh
+cd /home/ubuntu
+git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
+chown -R ubuntu:ubuntu proyecto
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap-cliente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/tlagente.sh
 EOF
 )
 
@@ -258,11 +264,13 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
-git clone https://github.com/ihumaram01/proyecto.git
-sudo chmod +x /proyecto/scripts/aws/keepalived-maestro1.sh
-sudo ./proyecto/scripts/aws/keepalived-maestro1.sh
-sudo chmod +x /proyecto/scripts/ldap-cliente.sh
-sudo chmod +x /proyecto/scripts/tlmaestro.sh
+cd /home/ubuntu
+git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
+chown -R ubuntu:ubuntu proyecto
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/keepalived-maestro1.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/keepalived-maestro1.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap-cliente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/tlmaestro.sh
 EOF
 )
 
@@ -290,11 +298,13 @@ USER_DATA=$(cat <<EOF
 apt update
 apt install -y unzip git
 hostnamectl set-hostname $HOSTNAME
-git clone https://github.com/ihumaram01/proyecto.git
-sudo chmod +x /proyecto/scripts/aws/keepalived-maestro2.sh
-sudo ./proyecto/scripts/aws/keepalived-maestro2.sh
-sudo chmod +x /proyecto/scripts/ldap-cliente.sh
-sudo chmod +x /proyecto/scripts/tlmaestro.sh
+cd /home/ubuntu
+git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
+chown -R ubuntu:ubuntu proyecto
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/keepalived-maestro2.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/keepalived-maestro2.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap-cliente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/tlmaestro.sh
 EOF
 )
 
