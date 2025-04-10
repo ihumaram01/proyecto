@@ -11,7 +11,7 @@ sudo dpkg-reconfigure slapd
 
 # Configurar /etc/ldap/ldap.conf
 echo "BASE      tdc=LDAP,dc=local" | sudo tee -a /etc/ldap/ldap.conf
-echo "URI       ldap://192.168.115.134:389" | sudo tee -a /etc/ldap/ldap.conf
+echo "URI       ldap://10.0.2.30:389" | sudo tee -a /etc/ldap/ldap.conf
 
 # Modificar /etc/nsswitch.conf
 sudo sed -i 's/^passwd:.*/passwd:\t\tfiles ldap/' /etc/nsswitch.conf
