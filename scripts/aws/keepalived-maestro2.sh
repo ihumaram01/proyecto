@@ -1,15 +1,8 @@
 #!/bin/bash
 # Script para configurar Keepalived en el Maestro 2 (Backup)
 
-# Pedir al usuario la dirección IP virtual
-echo "Ingrese la dirección IP virtual que tendra el servicio:"
-read virtual_ip
-
-# Verificar que el usuario haya ingresado una IP
-if [[ -z "$virtual_ip" ]]; then
-    echo "No se ha ingresado una IP. Saliendo..."
-    exit 1
-fi
+# Dirección IP virtual fija
+virtual_ip="10.0.2.100"
 
 echo "Instalando Keepalived..."
 sudo apt update && sudo apt install -y keepalived
@@ -36,4 +29,4 @@ echo "Habilitando y reiniciando Keepalived..."
 sudo systemctl enable keepalived
 sudo systemctl restart keepalived
 
-echo "Keepalived configurado correctamente en Maestro 2 (Backup)"
+echo "Keepalived configurado correctamente en Maestro 2 (Backup) con IP virtual: $virtual_ip"
