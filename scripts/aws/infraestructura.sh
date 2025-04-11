@@ -54,12 +54,13 @@ echo "Creando Internet Gateway y tabla de rutas públicas..."
 
 # Crear Internet Gateway
 IGW_ID=$(aws ec2 create-internet-gateway --query 'InternetGateway.InternetGatewayId' --output text)
-aws ec2 attach-internet-gateway --vpc-id "$VPC_ID" --internet-gateway-id "$IGW_ID"
+aws ec2 attach-internet-gateway --vpc-id "$VPC_ID" --internet-gateway-id "$IGW_ID" > /dev/null
 
 # Crear Tabla de Rutas Públicas
 RTB_PUBLIC_ID=$(aws ec2 create-route-table --vpc-id "$VPC_ID" --query 'RouteTable.RouteTableId' --output text)
-aws ec2 create-route --route-table-id "$RTB_PUBLIC_ID" --destination-cidr-block "0.0.0.0/0" --gateway-id "$IGW_ID"
-aws ec2 associate-route-table --subnet-id "$SUBNET_PUBLIC_ID" --route-table-id "$RTB_PUBLIC_ID"
+aws ec2 create-route --route-table-id "$RTB_PUBLIC_ID" --destination-cidr-block "0.0.0.0/0" --gateway-id "$IGW_ID" > /dev/null
+aws ec2 associate-route-table --subnet-id "$SUBNET_PUBLIC_ID" --route-table-id "$RTB_PUBLIC_ID" > /dev/null
+
 
 echo "Creando NAT Gateway y tabla de rutas privadas..."
 
@@ -86,8 +87,9 @@ done
 
 # Crear Tabla de Rutas Privadas
 RTB_PRIVATE_ID=$(aws ec2 create-route-table --vpc-id "$VPC_ID" --query 'RouteTable.RouteTableId' --output text)
-aws ec2 create-route --route-table-id "$RTB_PRIVATE_ID" --destination-cidr-block "0.0.0.0/0" --nat-gateway-id "$NAT_ID"
-aws ec2 associate-route-table --subnet-id "$SUBNET_PRIVATE_ID" --route-table-id "$RTB_PRIVATE_ID"
+aws ec2 create-route --route-table-id "$RTB_PRIVATE_ID" --destination-cidr-block "0.0.0.0/0" --nat-gateway-id "$NAT_ID" > /dev/null
+aws ec2 associate-route-table --subnet-id "$SUBNET_PRIVATE_ID" --route-table-id "$RTB_PRIVATE_ID" > /dev/null
+
 
 ###########################################
 #         GRUPOS DE SEGURIDAD             #
