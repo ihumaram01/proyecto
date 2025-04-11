@@ -64,7 +64,7 @@ expect {
         exp_continue
     }
     -re "Administrator email.*" {
-        send "prueba@prueba.local\r"
+        send "ihumaram01@educantabria.es\r"
         exp_continue
     }
     -re "Web Administration password.*" {
