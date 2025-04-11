@@ -206,7 +206,8 @@ cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/thinlinc/tlagente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlagente.sh
+sudo ./proyecto/scripts/aws/tlagente.sh
 EOF
 )
 
@@ -238,7 +239,8 @@ cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/thinlinc/tlagente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlagente.sh
+sudo ./proyecto/scripts/aws/tlagente.sh
 EOF
 )
 
@@ -272,7 +274,8 @@ chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/keepalived-maestro1.sh
 sudo ./proyecto/scripts/aws/keepalived-maestro1.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/thinlinc/tlmaestro.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
+sudo ./proyecto/scripts/aws/tlmaestro.sh
 EOF
 )
 
@@ -306,7 +309,8 @@ chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/keepalived-maestro2.sh
 sudo ./proyecto/scripts/aws/keepalived-maestro2.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/thinlinc/tlmaestro.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
+sudo ./proyecto/scripts/aws/tlmaestro.sh
 EOF
 )
 
