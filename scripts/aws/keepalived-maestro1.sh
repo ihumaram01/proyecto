@@ -19,10 +19,15 @@ vrrp_instance TLHA {
         auth_type PASS
         auth_pass thinlinc123
     }
+    unicast_src_ip 10.0.2.11   # IP privada del Maestro 1
+    unicast_peer {
+        10.0.2.12              # IP privada del Maestro 2
+    }
     virtual_ipaddress {
-        $virtual_ip
+        10.0.2.100
     }
 }
+
 EOF
 
 echo "Habilitando y reiniciando Keepalived..."
