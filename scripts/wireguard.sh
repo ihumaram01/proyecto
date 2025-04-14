@@ -7,8 +7,8 @@ SERVER_PRIV_KEY="$WG_DIR/server_private.key"
 SERVER_PUB_KEY="$WG_DIR/server_public.key"
 SERVER_IP="10.0.212.1/24"
 PORT="51820"
-NET_IFACE="ens5"
-DNS_SERVER="1.1.1.1"
+NET_IFACE="eth0"
+DNS_SERVER="10.0.212.1"  # DNS interno del servidor VPN
 
 # Instalar paquetes necesarios
 apt update && apt install -y wireguard qrencode
@@ -37,8 +37,8 @@ cat > "$WG_DIR/wg0.conf" <<EOF
 Address = $SERVER_IP
 ListenPort = $PORT
 PrivateKey = $SERVER_PRIV
-PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o $NET_IFACE -j MASQUERADE
-PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o $NET_IFACE -j MASQUERADE
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o $NET_IFACE -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o $NET_IFACE -j MASQUERADE
 
 EOF
 
@@ -60,7 +60,7 @@ DNS = $DNS_SERVER
 
 [Peer]
 PublicKey = $SERVER_PUB
-Endpoint = your-domain.duckdns.org:$PORT
+Endpoint = vpn-ivanhumara.duckdns.org:$PORT
 AllowedIPs = 0.0.0.0/0
 PersistentKeepalive = 25
 EOF
