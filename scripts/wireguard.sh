@@ -63,7 +63,7 @@ DNS = $DNS_SERVER
 
 [Peer]
 PublicKey = $SERVER_PUB
-Endpoint = your-domain.duckdns.org:$PORT
+Endpoint = vpn-ivanhumara.duckdns.org:$PORT
 AllowedIPs = 0.0.0.0/0
 PersistentKeepalive = 25
 EOF
