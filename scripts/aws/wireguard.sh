@@ -92,5 +92,6 @@ chmod 600 "$WG_DIR"/*.key "$WG_DIR"/*/*.key "$WG_DIR"/*.conf "$WG_DIR"/*/*.conf
 
 # Habilitar WireGuard al inicio
 systemctl enable wg-quick@wg0
+sudo wg-quick up wg0
 
 echo "✅ WireGuard configurado con éxito con la red 10.0.212.0/24 para clientes: ${CLIENTS[*]}"
