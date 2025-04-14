@@ -7,7 +7,7 @@ SERVER_PRIV_KEY="$WG_DIR/server_private.key"
 SERVER_PUB_KEY="$WG_DIR/server_public.key"
 SERVER_IP="10.0.212.1/24"
 PORT="51820"
-NET_IFACE="eth0"
+NET_IFACE="ens5"
 DNS_SERVER="8.8.8.8"
 # Instalar paquetes necesarios
 apt update && apt install -y wireguard qrencode
