@@ -276,9 +276,9 @@ git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >>
 chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/keepalived-maestro1.sh
 sudo ./proyecto/scripts/aws/keepalived-maestro1.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
 sudo ./proyecto/scripts/aws/tlmaestro.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
 EOF
 )
 
@@ -311,9 +311,9 @@ git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >>
 chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/keepalived-maestro2.sh
 sudo ./proyecto/scripts/aws/keepalived-maestro2.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
 sudo ./proyecto/scripts/aws/tlmaestro.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
 EOF
 )
 
