@@ -117,7 +117,7 @@ aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol
 aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 904 --cidr "10.0.2.0/24" # ThinLinc
 aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 5901-5999 --cidr "10.0.2.0/24" # ThinLinc
 aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 389 --cidr "10.0.2.0/24" # LDAP
-aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol icmp --port -1 --cidr "10.0.2.0/24" # PING
+aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol icmp --port -1 --cidr "0.0.0.0/0" # PING
 
 
 ###########################################
