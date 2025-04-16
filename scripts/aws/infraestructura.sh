@@ -80,20 +80,21 @@ aws s3api put-bucket-policy --bucket "$BUCKET_NAME" --policy "{
 echo "Habilitando el sitio web estático..."
 
 # Configurar como sitio web estático
-aws s3api proyecto/index.html --bucket "$BUCKET_NAME" --website-configuration '{
+aws s3api put-bucket-website --bucket "$BUCKET_NAME" --website-configuration '{
   "IndexDocument": { "Suffix": "index.html" },
-  "ErrorDocument": { "Key": "error.html" }
+  "ErrorDocument": { "Key": "index.html" }
 }'
 
-echo "Subiendo archivos del sitio..."
+echo "Subiendo archivo proyecto/index.html..."
 
-# Subir archivos (asume que los archivos están en ./pagina-web)
-aws s3 cp ./pagina-web/ s3://$BUCKET_NAME/ --recursive
-
-echo "Sitio web disponible en:"
-echo "http://$BUCKET_NAME.s3-website-$REGION.amazonaws.com"
-
-
+# Verificar que el archivo existe y subirlo
+if [ -f "proyecto/index.html" ]; then
+    aws s3 cp proyecto/index.html s3://$BUCKET_NAME/index.html
+    echo "Sitio web disponible en:"
+    echo "http://$BUCKET_NAME.s3-website-$REGION.amazonaws.com"
+else
+    echo "⚠️  El archivo proyecto/index.html no existe. No se subió nada."
+fi
 
 ###########################################
 #                 VPC                     #
