@@ -39,8 +39,9 @@ echo "Clave SSH creada y almacenada en: ${KEY_NAME}.pem"
 #              BUCKET S3                 #
 ###########################################
 
-echo "Creando bucket S3..."
+echo "Creando bucket S3 para hosting web..."
 
+# Crear el bucket S3
 if [ "$REGION" == "us-east-1" ]; then
     aws s3api create-bucket \
         --bucket "$BUCKET_NAME" \
@@ -52,12 +53,46 @@ else
         --create-bucket-configuration LocationConstraint="$REGION" > /dev/null
 fi
 
+echo "Desbloqueando acceso público al bucket..."
+
+# Desbloquear acceso público
 aws s3api put-public-access-block \
     --bucket "$BUCKET_NAME" \
     --public-access-block-configuration \
-        BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
+        BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false
 
-echo "Bucket S3 creado: $BUCKET_NAME"
+echo "Aplicando política pública de lectura..."
+
+# Agregar política pública de lectura
+aws s3api put-bucket-policy --bucket "$BUCKET_NAME" --policy "{
+  \"Version\": \"2012-10-17\",
+  \"Statement\": [
+    {
+      \"Sid\": \"PublicReadGetObject\",
+      \"Effect\": \"Allow\",
+      \"Principal\": \"*\",
+      \"Action\": \"s3:GetObject\",
+      \"Resource\": \"arn:aws:s3:::$BUCKET_NAME/*\"
+    }
+  ]
+}"
+
+echo "Habilitando el sitio web estático..."
+
+# Configurar como sitio web estático
+aws s3api proyecto/index.html --bucket "$BUCKET_NAME" --website-configuration '{
+  "IndexDocument": { "Suffix": "index.html" },
+  "ErrorDocument": { "Key": "error.html" }
+}'
+
+echo "Subiendo archivos del sitio..."
+
+# Subir archivos (asume que los archivos están en ./pagina-web)
+aws s3 cp ./pagina-web/ s3://$BUCKET_NAME/ --recursive
+
+echo "Sitio web disponible en:"
+echo "http://$BUCKET_NAME.s3-website-$REGION.amazonaws.com"
+
 
 
 ###########################################
