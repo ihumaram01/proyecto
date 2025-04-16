@@ -41,10 +41,16 @@ echo "Clave SSH creada y almacenada en: ${KEY_NAME}.pem"
 
 echo "Creando bucket S3..."
 
-aws s3api create-bucket \
-    --bucket "$BUCKET_NAME" \
-    --region "$REGION" \
-    --create-bucket-configuration LocationConstraint="$REGION" > /dev/null
+if [ "$REGION" == "us-east-1" ]; then
+    aws s3api create-bucket \
+        --bucket "$BUCKET_NAME" \
+        --region "$REGION" > /dev/null
+else
+    aws s3api create-bucket \
+        --bucket "$BUCKET_NAME" \
+        --region "$REGION" \
+        --create-bucket-configuration LocationConstraint="$REGION" > /dev/null
+fi
 
 aws s3api put-public-access-block \
     --bucket "$BUCKET_NAME" \
