@@ -19,6 +19,9 @@ AMI_ID="ami-04b4f1a9cf54c11d0" # Ubuntu Server 24.04
 INSTANCE_TYPE="t3.micro"
 VOLUME_SIZE=30
 
+# Variables de S3
+BUCKET_NAME="proyecto-ivan-bucket"
+
 echo "Creando clave SSH..."
 
 # Crear par de claves SSH y almacenar la clave en una variable
