@@ -53,15 +53,11 @@ else
         --create-bucket-configuration LocationConstraint="$REGION" > /dev/null
 fi
 
-echo "Desbloqueando acceso público al bucket..."
-
 # Desbloquear acceso público
 aws s3api put-public-access-block \
     --bucket "$BUCKET_NAME" \
     --public-access-block-configuration \
         BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false
-
-echo "Aplicando política pública de lectura..."
 
 # Agregar política pública de lectura
 aws s3api put-bucket-policy --bucket "$BUCKET_NAME" --policy "{
@@ -84,8 +80,6 @@ aws s3api put-bucket-website --bucket "$BUCKET_NAME" --website-configuration '{
   "IndexDocument": { "Suffix": "index.html" },
   "ErrorDocument": { "Key": "index.html" }
 }'
-
-echo "Subiendo archivo proyecto/index.html..."
 
 # Verificar que el archivo existe y subirlo
 if [ -f "proyecto/index.html" ]; then
