@@ -53,10 +53,28 @@ grep -q "pam_mkhomedir.so" "$COMMON_SESSION" || sed -i '1isession required pam_m
 echo "Actualizando configuración PAM..."
 pam-auth-update --force
 
-# Habilitar PasswordAuthentication y usar PAM
-sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
-sudo sed -i 's/#KbdInteractiveAuthentication no/KbdInteractiveAuthentication yes/' /etc/ssh/sshd_config
-sudo sed -i 's/#UsePAM yes/UsePAM yes/' /etc/ssh/sshd_config
+#!/bin/bash
+
+# Ruta del archivo de configuración de SSH
+SSHD_CONFIG="/etc/ssh/sshd_config"
+
+# Realizamos una copia de seguridad del archivo original
+cp $SSHD_CONFIG ${SSHD_CONFIG}.bak
+
+# Eliminar las líneas anteriores
+sed -i '/^PasswordAuthentication/d' $SSHD_CONFIG
+sed -i '/^KbdInteractiveAuthentication/d' $SSHD_CONFIG
+sed -i '/^UsePAM/d' $SSHD_CONFIG
+sed -i '/^PubkeyAuthentication/d' $SSHD_CONFIG
+
+# Escribir las nuevas configuraciones
+echo "PasswordAuthentication yes" >> $SSHD_CONFIG
+echo "KbdInteractiveAuthentication yes" >> $SSHD_CONFIG
+echo "UsePAM yes" >> $SSHD_CONFIG
+echo "PubkeyAuthentication yes" >> $SSHD_CONFIG
+
+# Reiniciar el servicio SSH
+sudo systemctl restart ssh
 
 # Reiniciar el sistema
 echo "Reiniciando el sistema..."
