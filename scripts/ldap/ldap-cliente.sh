@@ -53,6 +53,11 @@ grep -q "pam_mkhomedir.so" "$COMMON_SESSION" || sed -i '1isession required pam_m
 echo "Actualizando configuración PAM..."
 pam-auth-update --force
 
+# Habilitar PasswordAuthentication y usar PAM
+sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sudo sed -i 's/#KbdInteractiveAuthentication no/KbdInteractiveAuthentication yes/' /etc/ssh/sshd_config
+sudo sed -i 's/#UsePAM yes/UsePAM yes/' /etc/ssh/sshd_config
+
 # Reiniciar el sistema
 echo "Reiniciando el sistema..."
 sudo reboot
