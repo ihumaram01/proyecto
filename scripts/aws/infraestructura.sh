@@ -83,28 +83,28 @@ aws s3api put-bucket-website --bucket "$BUCKET_NAME" --website-configuration '{
 
 # Subir archivo index.html
 if [ -f "proyecto/www/index.html" ]; then
-    aws s3 cp proyecto/www/index.html s3://$BUCKET_NAME/index.html
+    aws s3 cp proyecto/www/index.html s3://$BUCKET_NAME/index.html > /dev/null
 else
     echo "⚠️  El archivo proyecto/www/index.html no existe. No se subió nada."
 fi
 
 # Subir linux.html
 if [ -f "proyecto/www/linux.html" ]; then
-    aws s3 cp proyecto/www/linux.html s3://$BUCKET_NAME/linux.html
+    aws s3 cp proyecto/www/linux.html s3://$BUCKET_NAME/linux.html > /dev/null
 else
     echo "⚠️  El archivo proyecto/www/linux.html no existe."
 fi
 
 # Subir windows.html
 if [ -f "proyecto/www/windows.html" ]; then
-    aws s3 cp proyecto/www/windows.html s3://$BUCKET_NAME/windows.html
+    aws s3 cp proyecto/www/windows.html s3://$BUCKET_NAME/windows.html > /dev/null
 else
     echo "⚠️  El archivo proyecto/www/windows.html no existe."
 fi
 
 # Subir movil.html
 if [ -f "proyecto/www/movil.html" ]; then
-    aws s3 cp proyecto/www/movil.html s3://$BUCKET_NAME/movil.html
+    aws s3 cp proyecto/www/movil.html s3://$BUCKET_NAME/movil.html > /dev/null
 else
     echo "⚠️  El archivo proyecto/www/movil.html no existe."
 fi
