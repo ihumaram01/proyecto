@@ -338,7 +338,7 @@ chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/keepalived-maestro1.sh
 #sudo ./proyecto/scripts/aws/keepalived-maestro1.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
-#sudo ./proyecto/scripts/aws/tlmaestro.sh
+sudo ./proyecto/scripts/aws/tlmaestro.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
 EOF
 )
@@ -373,7 +373,7 @@ chown -R ubuntu:ubuntu proyecto
 #sudo chmod +x /home/ubuntu/proyecto/scripts/aws/keepalived-maestro2.sh
 sudo ./proyecto/scripts/aws/keepalived-maestro2.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
-#sudo ./proyecto/scripts/aws/tlmaestro.sh
+sudo ./proyecto/scripts/aws/tlmaestro.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
 EOF
 )
