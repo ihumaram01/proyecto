@@ -91,10 +91,10 @@ sed -i "s/^master_hostname=localhost/master_hostname=$MASTER_HOSTNAME/" "$CONFIG
 sed -i "s/^allowed_clients=.*/allowed_clients=$ALLOWED_CLIENTS/" "$CONFIG_FILE"
 
 # Instalar entorno de escritorio
-sudo apt install xfce4 xfce4-goodies
+sudo apt install xfce4 xfce4-goodies -y
 
 # Instalar servidor VNC
-sudo apt install tigervnc-standalone-server tigervnc-viewer
+sudo apt install tigervnc-standalone-server tigervnc-viewer -y
 
 # Mensaje final
 echo "Los cambios han sido aplicados correctamente."
