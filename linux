@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conexión desde Linux - Proyecto VPN</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #e2e8f0;
+    }
+
+    header, section, footer {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      color: #93c5fd;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      color: #60a5fa;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      text-align: justify;
+      color: #cbd5e1;
+    }
+
+    ul {
+      text-align: left;
+      padding-left: 1.2rem;
+      color: #cbd5e1;
+    }
+
+    a {
+      color: #93c5fd;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #94a3b8;
+      border-top: 1px solid #475569;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Conectarse desde Linux</h1>
+  </header>
+
+  <section>
+    <h2>¿Qué necesitas?</h2>
+    <p>
+      Para conectarte a la VPN desde Linux, necesitarás tener instalado el cliente WireGuard. Este cliente es compatible con la mayoría de las distribuciones de Linux y se puede instalar fácilmente desde los repositorios oficiales.
+    </p>
+
+    <h2>Paso a paso</h2>
+    <ul>
+      <li>
+        Abre una terminal y actualiza tus repositorios:<br>
+        <code>sudo apt update</code>
+      </li>
+      <li>
+        Instala el paquete de WireGuard:<br>
+        <code>sudo apt install wireguard</code><br>
+        <!-- <img src="imagenes/instalacion_wireguard.png" alt="Instalación de WireGuard" style="width: 100%; height: auto;"> -->
+      </li>
+      <li>
+        Copia el archivo de configuración que te hemos proporcionado (archivo `.conf`).<br>
+        <!-- <img src="imagenes/copiar_configuracion.png" alt="Copiar configuración" style="width: 100%; height: auto;"> -->
+      </li>
+      <li>
+        Mueve el archivo de configuración a la carpeta de WireGuard:<br>
+        <code>sudo mv archivo.conf /etc/wireguard/</code>
+      </li>
+      <li>
+        Activa la VPN con el siguiente comando:<br>
+        <code>sudo wg-quick up archivo</code><br>
+        <!-- <img src="imagenes/activar_vpn.png" alt="Activar VPN" style="width: 100%; height: auto;"> -->
+      </li>
+      <li>
+        Para verificar la conexión, usa:<br>
+        <code>sudo wg</code>
+      </li>
+    </ul>
+
+    <h2>¿Problemas de conexión?</h2>
+    <p>
+      Asegúrate de que el archivo de configuración es correcto y que no haya problemas con la red. Si tienes problemas para conectar, revisa los logs de WireGuard con <code>sudo journalctl -u wg-quick@archivo</code>.
+    </p>
+  </section>
+
+  <footer>
+    <p>
