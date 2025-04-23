@@ -64,7 +64,7 @@ expect {
         exp_continue
     }
     -re "Administrator email.*" {
-        send "prueba@prueba.local\r"
+        send "ihumaram01@educantabria.es\r"
         exp_continue
     }
     -re "Web Administration password.*" {
@@ -79,8 +79,8 @@ EOF
 # Ruta al archivo de configuración
 CONFIG_FILE="/opt/thinlinc/etc/conf.d/vsmserver.hconf"
 
-# IPs de los agentes (EDITA ESTA LÍNEA MANUALMENTE)
-AGENT_IPS="192.168.115.32 192.168.115.33"
+# IPs de los agentes
+AGENT_IPS="10.0.2.21 10.0.2.22"
 
 # Cambiar max_sessions_per_user de 1 a 0
 sed -i 's/^max_sessions_per_user=1/max_sessions_per_user=0/' "$CONFIG_FILE"
