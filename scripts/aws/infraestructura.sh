@@ -81,14 +81,36 @@ aws s3api put-bucket-website --bucket "$BUCKET_NAME" --website-configuration '{
   "ErrorDocument": { "Key": "index.html" }
 }'
 
-# Verificar que el archivo existe y subirlo
+# Subir archivo index.html
 if [ -f "proyecto/index.html" ]; then
     aws s3 cp proyecto/index.html s3://$BUCKET_NAME/index.html
-    echo "Sitio web disponible en:"
-    echo "http://$BUCKET_NAME.s3-website-$REGION.amazonaws.com"
 else
     echo "⚠️  El archivo proyecto/index.html no existe. No se subió nada."
 fi
+
+# Subir linux.html
+if [ -f "proyecto/linux.html" ]; then
+    aws s3 cp proyecto/linux.html s3://$BUCKET_NAME/linux.html
+else
+    echo "⚠️  El archivo proyecto/linux.html no existe."
+fi
+
+# Subir windows.html
+if [ -f "proyecto/windows.html" ]; then
+    aws s3 cp proyecto/windows.html s3://$BUCKET_NAME/windows.html
+else
+    echo "⚠️  El archivo proyecto/windows.html no existe."
+fi
+
+# Subir movil.html
+if [ -f "proyecto/movil.html" ]; then
+    aws s3 cp proyecto/movil.html s3://$BUCKET_NAME/movil.html
+else
+    echo "⚠️  El archivo proyecto/movil.html no existe."
+fi
+
+echo "🌐 Sitio web disponible en:"
+echo "http://$BUCKET_NAME.s3-website-$REGION.amazonaws.com"
 
 ###########################################
 #                 VPC                     #
