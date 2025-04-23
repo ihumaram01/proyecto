@@ -3,28 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Conexión VPN - Tutoriales</title>
+  <title>Proyecto VPN - Guías de conexión</title>
   <style>
     body {
       font-family: sans-serif;
-      text-align: center;
-      padding: 2rem;
       background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header, section, footer {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      text-align: center;
     }
     h1 {
-      margin-bottom: 0.5rem;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
     }
     p {
-      max-width: 600px;
-      margin: 0 auto 2rem;
       font-size: 1.1rem;
       color: #333;
+    }
+    .cards {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 2rem;
     }
     .card {
       background: white;
       border-radius: 10px;
       padding: 1rem;
-      margin: 1rem auto;
       width: 300px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
@@ -33,22 +49,48 @@
       color: #0077cc;
       font-weight: bold;
     }
+    footer {
+      font-size: 0.95rem;
+      color: #666;
+      border-top: 1px solid #ddd;
+    }
   </style>
 </head>
 <body>
-  <h1>Proyecto de Conexión Segura mediante VPN</h1>
-  <p>
-    Este proyecto proporciona una infraestructura segura para que los usuarios puedan conectarse a una red privada virtual (VPN), permitiendo el acceso seguro a recursos internos desde cualquier ubicación. A continuación, encontrarás guías detalladas para configurar la conexión según tu dispositivo.
-  </p>
+  <header>
+    <h1>Proyecto de Conexión Segura mediante VPN</h1>
+  </header>
 
-  <div class="card">
-    <a href="windows.html">🪟 Conectarte desde Windows</a>
-  </div>
-  <div class="card">
-    <a href="linux.html">🐧 Conectarte desde Linux</a>
-  </div>
-  <div class="card">
-    <a href="movil.html">📱 Conectarte desde tu Móvil</a>
-  </div>
+  <section>
+    <h2>¿De qué va el proyecto?</h2>
+    <p>
+      Este proyecto tiene como objetivo ofrecer una solución sencilla y segura para conectarse a una red privada virtual (VPN).
+      A través de estas guías, cualquier usuario podrá configurar su acceso desde distintos dispositivos, garantizando el acceso
+      remoto a recursos internos desde cualquier parte del mundo.
+    </p>
+  </section>
+
+  <section>
+    <h2>Guías según tu dispositivo</h2>
+    <div class="cards">
+      <div class="card">
+        <a href="windows.html">🪟 Conectarte desde Windows</a>
+      </div>
+      <div class="card">
+        <a href="linux.html">🐧 Conectarte desde Linux</a>
+      </div>
+      <div class="card">
+        <a href="movil.html">📱 Conectarte desde tu Móvil</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <h2>¿Quién lo ha creado?</h2>
+    <p>
+      Proyecto realizado por Iván como parte de una infraestructura segura para usuarios remotos.<br>
+      Todos los derechos reservados © 2025.
+    </p>
+  </footer>
 </body>
 </html>
