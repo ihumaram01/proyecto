@@ -45,9 +45,21 @@
       color: #cbd5e1;
     }
 
-    a {
-      color: #93c5fd;
-      font-weight: bold;
+    .code-box {
+      background-color: #1e293b;
+      border-radius: 8px;
+      color: #e2e8f0;
+      padding: 1rem;
+      margin: 1rem 0;
+      font-family: "Courier New", monospace;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .image-step {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
     }
 
     footer {
@@ -72,16 +84,30 @@
 
     <h2>Paso a paso (Android & iOS)</h2>
     <ul>
-      <li>Descarga la aplicación oficial <strong>WireGuard</strong> desde la Play Store o App Store.</li>
-      <li>Abre la app y pulsa en <strong>"Añadir túnel"</strong>.</li>
-      <li>Escanea el código QR que te proporcionamos o importa el archivo de configuración (.conf).</li>
-      <li>Activa el túnel desde la app. La conexión quedará activa y segura.</li>
-      <li>Ahora ya puedes acceder al servicio ThinLinc desde el navegador o aplicación remota si está disponible.</li>
+      <li>
+        Descarga la aplicación oficial <strong>WireGuard</strong> desde la <a href="https://play.google.com/store/apps/details?id=com.wireguard.android" target="_blank">Play Store</a> o <a href="https://apps.apple.com/app/wireguard/id1441195209" target="_blank">App Store</a>.
+        <div class="image-step"></div>
+      </li>
+      <li>
+        Abre la app y pulsa en <strong>"Añadir túnel"</strong>.
+        <div class="image-step"></div>
+      </li>
+      <li>
+        Escanea el código QR que te proporcionamos o importa el archivo de configuración (.conf).
+        <div class="image-step"></div>
+      </li>
+      <li>
+        Activa el túnel desde la app. La conexión quedará activa y segura.
+        <div class="image-step"></div>
+      </li>
+      <li>
+        Ahora ya puedes acceder al servicio ThinLinc desde el navegador o aplicación remota si está disponible.
+      </li>
     </ul>
 
     <h2>¿Problemas de conexión?</h2>
     <p>
-      Asegúrate de que el túnel esté activado, de tener internet, y de que el archivo de configuración es el correcto. Si sigues teniendo problemas, revisa que tu red no bloquee conexiones VPN o contacta con el administrador.
+      Asegúrate de que el túnel esté activado, de tener conexión a Internet, y de que el archivo de configuración sea correcto. Si sigues teniendo problemas, revisa que tu red no bloquee conexiones VPN o contacta con el administrador.
     </p>
   </section>
 
