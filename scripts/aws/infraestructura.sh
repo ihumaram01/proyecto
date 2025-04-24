@@ -183,6 +183,15 @@ aws ec2 authorize-security-group-ingress --group-id "$SG_WIREGUARD_ID" --protoco
 aws ec2 authorize-security-group-ingress --group-id "$SG_WIREGUARD_ID" --protocol tcp --port 22 --cidr "0.0.0.0/0" # SSH
 aws ec2 authorize-security-group-ingress --group-id "$SG_WIREGUARD_ID" --protocol icmp --port -1 --cidr "10.0.2.0/24" # PING
 
+# Grupo de seguridad para Zabbix
+SG_ZABBIX_ID=$(aws ec2 create-security-group --group-name "sg_zabbix" --description "SG para Zabbix Server" --vpc-id "$VPC_ID" --query 'GroupId' --output text)
+aws ec2 authorize-security-group-ingress --group-id "$SG_ZABBIX_ID" --protocol tcp --port 22 --cidr "0.0.0.0/0" # SSH
+aws ec2 authorize-security-group-ingress --group-id "$SG_ZABBIX_ID" --protocol tcp --port 10050 --cidr "0.0.0.0/0" # Zabbix agente
+aws ec2 authorize-security-group-ingress --group-id "$SG_ZABBIX_ID" --protocol tcp --port 10051 --cidr "0.0.0.0/0" # Zabbix server
+aws ec2 authorize-security-group-ingress --group-id "$SG_ZABBIX_ID" --protocol tcp --port 80 --cidr "0.0.0.0/0" # Zabbix
+aws ec2 authorize-security-group-ingress --group-id "$SG_ZABBIX_ID" --protocol tcp --port 443 --cidr "0.0.0.0/0" # Zabbix
+aws ec2 authorize-security-group-ingress --group-id "$SG_ZABBIX_ID" --protocol icmp --port -1 --cidr "0.0.0.0/0" # PING
+
 # Grupo de seguridad para LDAP
 SG_LDAP_ID=$(aws ec2 create-security-group --group-name "sg_ldap" --description "SG para LDAP" --vpc-id "$VPC_ID" --query 'GroupId' --output text)
 aws ec2 authorize-security-group-ingress --group-id "$SG_LDAP_ID" --protocol tcp --port 22 --cidr "0.0.0.0/0" # SSH
@@ -195,7 +204,7 @@ aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol
 aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 300 --cidr "0.0.0.0/0" # ThinLinc
 aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 443 --cidr "0.0.0.0/0" # ThinLinc
 aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 904 --cidr "0.0.0.0/0" # ThinLinc
-aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 5901-5999 --cidr "0.0.0.0/0"" # ThinLinc
+aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 5901-5999 --cidr "0.0.0.0/0" # ThinLinc
 aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol tcp --port 389 --cidr "10.0.2.0/24" # LDAP
 aws ec2 authorize-security-group-ingress --group-id "$SG_THINLINC_ID" --protocol icmp --port -1 --cidr "0.0.0.0/0" # PING
 
@@ -246,7 +255,7 @@ echo "  Lanzando instancia Zabbix..."
 # Instancia para Zabbix
 INSTANCE_NAME="Zabbix"
 SUBNET_ID="$SUBNET_PUBLIC_ID"
-SECURITY_GROUP_ID="$SG_WIREGUARD_ID"  # Cambiar si Zabbix requiere otro grupo de seguridad
+SECURITY_GROUP_ID="$SG_ZABBIX_ID"
 PRIVATE_IP="10.0.1.20"
 
 HOSTNAME="Zabbix"
@@ -275,7 +284,6 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --query "Instances[0].InstanceId" \
     --output text)
 echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
-
 
 echo "  Lanzando LDAP..."
 
