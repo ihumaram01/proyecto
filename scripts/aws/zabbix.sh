@@ -1,36 +1,27 @@
 #!/bin/bash
 
-# Variables
-ZABBIX_DB="zabbix"
-ZABBIX_USER="zabbix"
-ZABBIX_PASS="Admin1"
+# Instalar apache2 y postgresql
+sudo apt update
+sudo apt install -y apache2
+sudo apt install -y postgresql
 
-echo "[+] Instalando repositorio de Zabbix..."
-wget -q https://repo.zabbix.com/zabbix/6.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.4-1+ubuntu22.04_all.deb
-dpkg -i zabbix-release_6.4-1+ubuntu22.04_all.deb
-apt update
+#Instalar el repositorio de zabbix
+sudo wget https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_7.0-2+ubuntu24.04_all.deb
+sudo dpkg -i zabbix-release_7.0-2+ubuntu24.04_all.deb
+sudo apt update
 
-echo "[+] Instalando paquetes de Zabbix y MariaDB..."
-apt install -y zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent mariadb-server
+# Instalar servidor zabbix, interfaz web y agente
+sudo apt install -y zabbix-server-pgsql zabbix-frontend-php php8.3-pgsql zabbix-apache-conf zabbix-sql-scripts zabbix-agent
 
-echo "[+] Configurando base de datos de Zabbix..."
-mysql -uroot <<EOF
-CREATE DATABASE ${ZABBIX_DB} CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
-CREATE USER ${ZABBIX_USER}@localhost IDENTIFIED BY '${ZABBIX_PASS}';
-GRANT ALL PRIVILEGES ON ${ZABBIX_DB}.* TO ${ZABBIX_USER}@localhost;
-FLUSH PRIVILEGES;
-EOF
+# Crear la base de datos inicial
+sudo -u postgres createuser --pwprompt zabbix
+sudo -u postgres createdb -O zabbix zabbix
+zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psql zabbix
 
-echo "[+] Importando esquema de la base de datos..."
-zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql -u${ZABBIX_USER} -p${ZABBIX_PASS} ${ZABBIX_DB}
+# Configuración de Zabbix Server
+echo "Configurando Zabbix Server..."
+sudo sed -i 's/# DBPassword=/DBPassword=Admin1/' /etc/zabbix/zabbix_server.conf
 
-echo "[+] Configurando Zabbix Server..."
-sed -i "s|^# DBPassword=.*|DBPassword=${ZABBIX_PASS}|" /etc/zabbix/zabbix_server.conf
-
-echo "[+] Habilitando e iniciando servicios..."
-systemctl restart zabbix-server zabbix-agent apache2
-systemctl enable zabbix-server zabbix-agent apache2
-
-echo "[✓] Instalación completa. Accedé desde http://<IP_DE_TU_MAQUINA>/zabbix"
-echo "    Usuario: Admin"
-echo "    Contraseña: zabbix"
+# Reiniciar los servicios
+sudo systemctl restart zabbix-server zabbix-agent apache2
+sudo systemctl enable zabbix-server zabbix-agent apache2
