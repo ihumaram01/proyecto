@@ -85,13 +85,9 @@
       <li>
         Instala el paquete de WireGuard:<br>
         <div class="code-box">sudo apt install wireguard</div>
-        <!-- Imagen de instalación de WireGuard -->
-        <img src="imagenes/instalacion_wireguard.png" alt="Instalación de WireGuard" style="width: 100%; height: auto;">
       </li>
       <li>
         Copia el archivo de configuración que te hemos proporcionado (archivo `.conf`).<br>
-        <!-- Imagen de copiar archivo de configuración -->
-        <img src="imagenes/copiar_configuracion.png" alt="Copiar configuración" style="width: 100%; height: auto;">
       </li>
       <li>
         Mueve el archivo de configuración a la carpeta de WireGuard:<br>
@@ -100,8 +96,6 @@
       <li>
         Activa la VPN con el siguiente comando:<br>
         <div class="code-box">sudo wg-quick up archivo</div>
-        <!-- Imagen de activar VPN -->
-        <img src="imagenes/activar_vpn.png" alt="Activar VPN" style="width: 100%; height: auto;">
       </li>
       <li>
         Para verificar la conexión, usa:<br>
@@ -113,8 +107,6 @@
     <p>
       Asegúrate de que el archivo de configuración es correcto y que no haya problemas con la red. Si tienes problemas para conectar, revisa los logs de WireGuard con:<br>
       <div class="code-box">sudo journalctl -u wg-quick@archivo</div>
-      <!-- Imagen de revisar logs -->
-      <img src="imagenes/revisar_logs.png" alt="Revisar logs" style="width: 100%; height: auto;">
     </p>
   </section>
 
