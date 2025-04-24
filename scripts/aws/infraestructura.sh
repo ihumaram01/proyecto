@@ -271,7 +271,7 @@ cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix.sh
-sudo ./home/ubuntu/proyecto/scripts/aws/zabbix.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-server.sh
 EOF
 )
 
