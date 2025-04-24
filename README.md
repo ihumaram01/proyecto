@@ -7,5 +7,6 @@ Para clonar este repositorio, usa el siguiente comando:
    ```bash
    git clone https://github.com/ihumaram01/proyecto.git
    ```
+## Diagrama del proyecto
 
 ![Diagrama del Proyecto](https://github.com/ihumaram01/proyecto/blob/main/Diagrama-Proyecto.png?raw=true)
