@@ -233,10 +233,45 @@ hostnamectl set-hostname $HOSTNAME
 cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
-sudo chmod +x /proyecto/scripts/aws/wireguard.sh
-sudo chmod +x /proyecto/scripts/aws/zabbix-agente.sh
-sudo ./proyecto/scripts/aws/wireguard.sh
-sudo ./proyecto/scripts/aws/zabbix-agente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/wireguard.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/wireguard.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+EOF
+)
+
+INSTANCE_ID=$(aws ec2 run-instances \
+    --image-id "$AMI_ID" \
+    --instance-type "$INSTANCE_TYPE" \
+    --key-name "$KEY_NAME" \
+    --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
+    --network-interfaces "SubnetId=$SUBNET_ID,AssociatePublicIpAddress=true,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
+    --user-data "$USER_DATA" \
+    --query "Instances[0].InstanceId" \
+    --output text)
+echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
+
+echo "  Lanzando instancia Zabbix..."
+
+# Instancia para Zabbix
+INSTANCE_NAME="Zabbix"
+SUBNET_ID="$SUBNET_PUBLIC_ID"
+SECURITY_GROUP_ID="$SG_ZABBIX_ID"
+PRIVATE_IP="10.0.1.20"
+
+HOSTNAME="Zabbix"
+USER_DATA=$(cat <<EOF
+#!/bin/bash
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+sudo apt update
+sudo apt install -y unzip git
+hostnamectl set-hostname $HOSTNAME
+cd /home/ubuntu
+git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
+chown -R ubuntu:ubuntu proyecto
+sudo chmod +x /home/ubuntu/home/ubuntu/proyecto/scripts/aws/zabbix.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-server.sh
 EOF
 )
 
@@ -271,42 +306,7 @@ cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix.sh
-sudo ./proyecto/scripts/aws/zabbix-server.sh
-EOF
-)
-
-INSTANCE_ID=$(aws ec2 run-instances \
-    --image-id "$AMI_ID" \
-    --instance-type "$INSTANCE_TYPE" \
-    --key-name "$KEY_NAME" \
-    --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
-    --network-interfaces "SubnetId=$SUBNET_ID,AssociatePublicIpAddress=true,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
-    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$INSTANCE_NAME}]" \
-    --user-data "$USER_DATA" \
-    --query "Instances[0].InstanceId" \
-    --output text)
-echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
-
-echo "  Lanzando instancia Zabbix..."
-
-# Instancia para Zabbix
-INSTANCE_NAME="Zabbix"
-SUBNET_ID="$SUBNET_PUBLIC_ID"
-SECURITY_GROUP_ID="$SG_ZABBIX_ID"
-PRIVATE_IP="10.0.1.20"
-
-HOSTNAME="Zabbix"
-USER_DATA=$(cat <<EOF
-#!/bin/bash
-exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-sudo apt update
-sudo apt install -y unzip git
-hostnamectl set-hostname $HOSTNAME
-cd /home/ubuntu
-git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
-chown -R ubuntu:ubuntu proyecto
-sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix.sh
-sudo ./proyecto/scripts/aws/zabbix.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/zabbix.sh
 EOF
 )
 
@@ -339,9 +339,9 @@ hostnamectl set-hostname $HOSTNAME
 cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
-sudo chmod +x /proyecto/scripts/ldap/ldap-server.sh
-sudo chmod +x /proyecto/scripts/aws/zabbix-agente.sh
-sudo ./proyecto/scripts/aws/zabbix-agente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-server.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
 EOF
 )
 
@@ -374,11 +374,11 @@ hostnamectl set-hostname $HOSTNAME
 cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
-sudo chmod +x /proyecto/scripts/aws/tlagente.sh
-sudo chmod +x /proyecto/scripts/aws/zabbix-agente.sh
-sudo chmod +x /proyecto/scripts/ldap/ldap-cliente.sh
-sudo ./proyecto/scripts/aws/tlagente.sh
-sudo ./proyecto/scripts/aws/zabbix-agente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlagente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/tlagente.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
 EOF
 )
 
@@ -409,11 +409,11 @@ hostnamectl set-hostname $HOSTNAME
 cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
-sudo chmod +x /proyecto/scripts/aws/zabbix-agente.sh
-sudo chmod +x /proyecto/scripts/aws/tlagente.sh
-sudo chmod +x /proyecto/scripts/ldap/ldap-cliente.sh
-sudo ./proyecto/scripts/aws/tlagente.sh
-sudo ./proyecto/scripts/aws/zabbix-agente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlagente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/tlagente.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
 EOF
 )
 
@@ -444,11 +444,11 @@ hostnamectl set-hostname $HOSTNAME
 cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
-sudo chmod +x /proyecto/scripts/aws/tlmaestro.sh
-sudo chmod +x /proyecto/scripts/aws/zabbix-agente.sh
-sudo chmod +x /proyecto/scripts/ldap/ldap-cliente.sh
-sudo ./proyecto/scripts/aws/tlmaestro.sh
-sudo ./proyecto/scripts/aws/zabbix-agente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
 EOF
 )
 
@@ -479,11 +479,11 @@ hostnamectl set-hostname $HOSTNAME
 cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
-sudo chmod +x /proyecto/scripts/aws/tlmaestro.sh
-sudo chmod +x /proyecto/scripts/aws/zabbix-agente.sh
-sudo chmod +x /proyecto/scripts/ldap/ldap-cliente.sh
-sudo ./proyecto/scripts/aws/tlmaestro.sh
-sudo ./proyecto/scripts/aws/zabbix-agente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
+sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
 EOF
 )
 
