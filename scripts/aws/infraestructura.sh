@@ -235,8 +235,8 @@ git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >>
 chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/wireguard.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
-sudo ./home/ubuntu/proyecto/scripts/aws/wireguard.sh
-sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+sudo ./proyecto/scripts/aws/wireguard.sh
+sudo ./proyecto/scripts/aws/zabbix-agente.sh
 EOF
 )
 
@@ -271,7 +271,7 @@ cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix.sh
-sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-server.sh
+sudo ./proyecto/scripts/aws/zabbix-server.sh
 EOF
 )
 
@@ -306,7 +306,7 @@ git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >>
 chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-server.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
-sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+sudo ./proyecto/scripts/aws/zabbix-agente.sh
 EOF
 )
 
@@ -342,8 +342,8 @@ chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlagente.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
-sudo ./home/ubuntu/proyecto/scripts/aws/tlagente.sh
-sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+sudo ./proyecto/scripts/aws/tlagente.sh
+sudo ./proyecto/scripts/aws/zabbix-agente.sh
 EOF
 )
 
@@ -377,8 +377,8 @@ chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlagente.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
-sudo ./home/ubuntu/proyecto/scripts/aws/tlagente.sh
-sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+sudo ./proyecto/scripts/aws/tlagente.sh
+sudo ./proyecto/scripts/aws/zabbix-agente.sh
 EOF
 )
 
@@ -412,8 +412,8 @@ chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
-sudo ./home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
-sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+sudo ./proyecto/scripts/aws/tlmaestro.sh
+sudo ./proyecto/scripts/aws/zabbix-agente.sh
 EOF
 )
 
@@ -447,8 +447,8 @@ chown -R ubuntu:ubuntu proyecto
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
 sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
-sudo ./home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
-sudo ./home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+sudo ./proyecto/scripts/aws/tlmaestro.sh
+sudo ./proyecto/scripts/aws/zabbix-agente.sh
 EOF
 )
 
