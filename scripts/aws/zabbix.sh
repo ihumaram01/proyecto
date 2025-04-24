@@ -35,3 +35,7 @@ zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psq
 # Configuración de Zabbix Server
 echo "Configurando Zabbix Server..."
 sudo sed -i 's/# DBPassword=/DBPassword=Admin1/' /etc/zabbix/zabbix_server.conf
+
+# Reiniciar los servicios
+sudo systemctl restart zabbix-server zabbix-agent apache2
+sudo systemctl enable zabbix-server zabbix-agent apache2
