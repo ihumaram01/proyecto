@@ -79,7 +79,7 @@ EOF
 CONFIG_FILE="/opt/thinlinc/etc/conf.d/vsmagent.hconf"
 
 # IP virtual del maestro
-MASTER_HOSTNAME="10.0.2.100"
+MASTER_HOSTNAME="10.0.2.11"
 
 # IPs de los clientes permitidos
 ALLOWED_CLIENTS="10.0.2.21 10.0.2.22"
