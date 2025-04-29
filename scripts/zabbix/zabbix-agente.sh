@@ -22,4 +22,8 @@ sudo sed -i "s/^Hostname=Zabbix server/Hostname=$(hostname)/" /etc/zabbix/zabbix
 sudo systemctl restart zabbix-agent
 sudo systemctl enable zabbix-agent
 
+sudo apt install rsyslog -y
+sudo chgrp zabbix /var/log/auth.log
+sudo chmod 640 /var/log/auth.log
+
 echo "✅ Zabbix Agent instalado y conectado a $ZABBIX_SERVER como '$(hostname)'"
