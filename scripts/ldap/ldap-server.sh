@@ -47,6 +47,25 @@ EOF
 # Agregar usuario al LDAP
 ldapadd -x -D "cn=admin,dc=LDAP,dc=local" -W -f usuario.ldif
 
+# Crear usuario2.ldif
+cat <<EOF | sudo tee usuario2.ldif
+dn: uid=pcuadrado,ou=usuarios,dc=LDAP,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: Paco Cuadrado
+sn: Cuadrado
+uid: pcuadrado
+uidNumber: 1002
+gidNumber: 1002
+homeDirectory: /home/pcuadrado
+loginShell: /bin/bash
+userPassword: Admin1
+EOF
+
+# Agregar usuario al LDAP
+ldapadd -x -D "cn=admin,dc=LDAP,dc=local" -W -f usuario2.ldif
+
 # Verificar LDAP
 ldapsearch -x -LLL -b "dc=LDAP,dc=local"
 
