@@ -399,11 +399,10 @@ echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
 
 echo "  Lanzando ThinLinc Maestro1..."
 
-# Instancia para ThinLinc Maestro1
 INSTANCE_NAME="ThinLincMaestro1"
 PRIVATE_IP="10.0.2.11"
-
 HOSTNAME="ThinLincMaestro1"
+
 USER_DATA=$(cat <<EOF
 #!/bin/bash
 apt update
@@ -412,15 +411,15 @@ hostnamectl set-hostname $HOSTNAME
 cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
-sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
+chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
+chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
 sudo ./proyecto/scripts/aws/tlmaestro.sh
 sudo ./proyecto/scripts/aws/zabbix-agente.sh
 EOF
 )
 
-INSTANCE_ID=$(aws ec2 run-instances \
+ID_MAESTRO1=$(aws ec2 run-instances \
     --image-id "$AMI_ID" \
     --instance-type "$INSTANCE_TYPE" \
     --key-name "$KEY_NAME" \
@@ -430,15 +429,15 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --user-data "$USER_DATA" \
     --query "Instances[0].InstanceId" \
     --output text)
-echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
+
+echo "${INSTANCE_NAME} creada: ${ID_MAESTRO1}"
 
 echo "  Lanzando ThinLinc Maestro2..."
 
-# Instancia para ThinLinc Maestro2
 INSTANCE_NAME="ThinLincMaestro2"
 PRIVATE_IP="10.0.2.12"
-
 HOSTNAME="ThinLincMaestro2"
+
 USER_DATA=$(cat <<EOF
 #!/bin/bash
 apt update
@@ -447,15 +446,15 @@ hostnamectl set-hostname $HOSTNAME
 cd /home/ubuntu
 git clone http://github.com/ihumaram01/proyecto.git || echo "Fallo al clonar" >> /var/log/user-data.log
 chown -R ubuntu:ubuntu proyecto
-sudo chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
-sudo chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
+chmod +x /home/ubuntu/proyecto/scripts/aws/tlmaestro.sh
+chmod +x /home/ubuntu/proyecto/scripts/aws/zabbix-agente.sh
+chmod +x /home/ubuntu/proyecto/scripts/ldap/ldap-cliente.sh
 sudo ./proyecto/scripts/aws/tlmaestro.sh
 sudo ./proyecto/scripts/aws/zabbix-agente.sh
 EOF
 )
 
-INSTANCE_ID=$(aws ec2 run-instances \
+ID_MAESTRO2=$(aws ec2 run-instances \
     --image-id "$AMI_ID" \
     --instance-type "$INSTANCE_TYPE" \
     --key-name "$KEY_NAME" \
@@ -465,5 +464,73 @@ INSTANCE_ID=$(aws ec2 run-instances \
     --user-data "$USER_DATA" \
     --query "Instances[0].InstanceId" \
     --output text)
-echo "${INSTANCE_NAME} creada: ${INSTANCE_ID}"
+
+echo "${INSTANCE_NAME} creada: ${ID_MAESTRO2}"
+
+###########################################
+#        Network Load Balancer (NLB)      #
+###########################################
+
+# Crear NLB interno
+aws elbv2 create-load-balancer \
+  --name ThinLincInternalNLB \
+  --type network \
+  --scheme internal \
+  --subnets $SUBNET_PRIVATE_ID \
+  --region $REGION
+
+# Obtener ARN del NLB
+NLB_ARN=$(aws elbv2 describe-load-balancers \
+  --names ThinLincInternalNLB \
+  --region $REGION \
+  --query "LoadBalancers[0].LoadBalancerArn" \
+  --output text)
+
+# Crear Target Group para puerto 22 (SSH)
+TG_SSH_ARN=$(aws elbv2 create-target-group \
+  --name tg-ssh \
+  --protocol TCP \
+  --port 22 \
+  --vpc-id $VPC_ID \
+  --target-type instance \
+  --region $REGION \
+  --query "TargetGroups[0].TargetGroupArn" \
+  --output text)
+
+# Crear Target Group para puerto 300 (ThinLinc)
+TG_300_ARN=$(aws elbv2 create-target-group \
+  --name tg-300 \
+  --protocol TCP \
+  --port 300 \
+  --vpc-id $VPC_ID \
+  --target-type instance \
+  --region $REGION \
+  --query "TargetGroups[0].TargetGroupArn" \
+  --output text)
+
+# Registrar instancias en los Target Groups
+aws elbv2 register-targets --target-group-arn $TG_SSH_ARN \
+  --targets Id=$ID_MAESTRO1 Id=$ID_MAESTRO2 \
+  --region $REGION
+
+aws elbv2 register-targets --target-group-arn $TG_300_ARN \
+  --targets Id=$ID_MAESTRO1 Id=$ID_MAESTRO2 \
+  --region $REGION
+
+# Crear Listeners en el NLB
+aws elbv2 create-listener \
+  --load-balancer-arn $NLB_ARN \
+  --protocol TCP \
+  --port 22 \
+  --default-actions Type=forward,TargetGroupArn=$TG_SSH_ARN \
+  --region $REGION
+
+aws elbv2 create-listener \
+  --load-balancer-arn $NLB_ARN \
+  --protocol TCP \
+  --port 300 \
+  --default-actions Type=forward,TargetGroupArn=$TG_300_ARN \
+  --region $REGION
+
+
 echo "✅ Infraestructura desplegada correctamente."
