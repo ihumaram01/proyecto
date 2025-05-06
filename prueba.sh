@@ -508,6 +508,19 @@ TG_300_ARN=$(aws elbv2 create-target-group \
   --query "TargetGroups[0].TargetGroupArn" \
   --output text)
 
+# Obtener IDs de las instancias
+ID_MAESTRO1=$(aws ec2 describe-instances \
+  --filters "Name=private-ip-address,Values=10.0.2.11" \
+  --region $REGION \
+  --query "Reservations[0].Instances[0].InstanceId" \
+  --output text)
+
+ID_MAESTRO2=$(aws ec2 describe-instances \
+  --filters "Name=private-ip-address,Values=10.0.2.12" \
+  --region $REGION \
+  --query "Reservations[0].Instances[0].InstanceId" \
+  --output text)
+
 # Registrar instancias en los Target Groups
 aws elbv2 register-targets --target-group-arn $TG_SSH_ARN \
   --targets Id=$ID_MAESTRO1 Id=$ID_MAESTRO2 \
@@ -531,6 +544,5 @@ aws elbv2 create-listener \
   --port 300 \
   --default-actions Type=forward,TargetGroupArn=$TG_300_ARN \
   --region $REGION
-
 
 echo "✅ Infraestructura desplegada correctamente."
