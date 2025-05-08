@@ -39,3 +39,23 @@ sudo sed -i 's/# DBPassword=/DBPassword=Admin1/' /etc/zabbix/zabbix_server.conf
 # Reiniciar los servicios
 sudo systemctl restart zabbix-server zabbix-agent apache2
 sudo systemctl enable zabbix-server zabbix-agent apache2
+
+# Configuracion inicial
+sudo tee /etc/zabbix/web/zabbix.conf.php > /dev/null <<EOF
+<?php
+\$DB['TYPE']     = 'POSTGRESQL';
+\$DB['SERVER']   = 'localhost';
+\$DB['PORT']     = '5432';
+\$DB['DATABASE'] = 'zabbix';
+\$DB['USER']     = 'zabbix';
+\$DB['PASSWORD'] = 'Admin1';
+\$DB['SCHEMA']   = 'public';
+
+\$ZBX_SERVER      = 'localhost';
+\$ZBX_SERVER_PORT = '10051';
+\$ZBX_SERVER_NAME = 'Zabbix Server';
+
+\$IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
+EOF
+
+sudo chown www-data:www-data /etc/zabbix/web/zabbix.conf.php
