@@ -477,7 +477,7 @@ aws elbv2 create-load-balancer \
   --type network \
   --scheme internal \
   --subnets $SUBNET_PRIVATE_ID \
-  --region $REGION
+  --region $REGION > /dev/null 2>&1
 
 # Obtener ARN del NLB
 NLB_ARN=$(aws elbv2 describe-load-balancers \
@@ -495,7 +495,7 @@ TG_SSH_ARN=$(aws elbv2 create-target-group \
   --target-type instance \
   --region $REGION \
   --query "TargetGroups[0].TargetGroupArn" \
-  --output text)
+  --output text > /dev/null 2>&1)
 
 # Crear Target Group para puerto 300 (ThinLinc)
 TG_300_ARN=$(aws elbv2 create-target-group \
@@ -506,7 +506,7 @@ TG_300_ARN=$(aws elbv2 create-target-group \
   --target-type instance \
   --region $REGION \
   --query "TargetGroups[0].TargetGroupArn" \
-  --output text)
+  --output text > /dev/null 2>&1)
 
 # Obtener IDs de las instancias
 ID_MAESTRO1=$(aws ec2 describe-instances \
@@ -524,11 +524,11 @@ ID_MAESTRO2=$(aws ec2 describe-instances \
 # Registrar instancias en los Target Groups
 aws elbv2 register-targets --target-group-arn $TG_SSH_ARN \
   --targets Id=$ID_MAESTRO1 Id=$ID_MAESTRO2 \
-  --region $REGION
+  --region $REGION > /dev/null 2>&1
 
 aws elbv2 register-targets --target-group-arn $TG_300_ARN \
   --targets Id=$ID_MAESTRO1 Id=$ID_MAESTRO2 \
-  --region $REGION
+  --region $REGION > /dev/null 2>&1
 
 # Crear Listeners en el NLB
 aws elbv2 create-listener \
@@ -536,13 +536,13 @@ aws elbv2 create-listener \
   --protocol TCP \
   --port 22 \
   --default-actions Type=forward,TargetGroupArn=$TG_SSH_ARN \
-  --region $REGION
+  --region $REGION > /dev/null 2>&1
 
 aws elbv2 create-listener \
   --load-balancer-arn $NLB_ARN \
   --protocol TCP \
   --port 300 \
   --default-actions Type=forward,TargetGroupArn=$TG_300_ARN \
-  --region $REGION
+  --region $REGION > /dev/null 2>&1
 
 echo "✅ Infraestructura desplegada correctamente."
