@@ -17,6 +17,7 @@ AMI_ID="ami-04b4f1a9cf54c11d0" # Ubuntu Server 24.04
 
 # Tipo de instancia y tamaño del disco
 INSTANCE_TYPE="t3.micro"
+INSTANCE_TYPE_2="t3.small"
 VOLUME_SIZE=30
 
 # Variables de S3
@@ -352,7 +353,7 @@ EOF
 
 INSTANCE_ID=$(aws ec2 run-instances \
     --image-id "$AMI_ID" \
-    --instance-type "$INSTANCE_TYPE" \
+    --instance-type "$INSTANCE_TYPE_2" \
     --key-name "$KEY_NAME" \
     --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
     --network-interfaces "SubnetId=$SUBNET_PRIVATE_ID,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
@@ -387,7 +388,7 @@ EOF
 
 INSTANCE_ID=$(aws ec2 run-instances \
     --image-id "$AMI_ID" \
-    --instance-type "$INSTANCE_TYPE" \
+    --instance-type "$INSTANCE_TYPE_2" \
     --key-name "$KEY_NAME" \
     --block-device-mappings "DeviceName=/dev/sda1,Ebs={VolumeSize=$VOLUME_SIZE,VolumeType=gp3,DeleteOnTermination=true}" \
     --network-interfaces "SubnetId=$SUBNET_PRIVATE_ID,DeviceIndex=0,PrivateIpAddresses=[{Primary=true,PrivateIpAddress=$PRIVATE_IP}],Groups=[$SECURITY_GROUP_ID]" \
