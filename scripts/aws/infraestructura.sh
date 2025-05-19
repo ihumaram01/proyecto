@@ -16,7 +16,7 @@ KEY_NAME="ssh-proyecto-ivan"
 AMI_ID="ami-04b4f1a9cf54c11d0" # Ubuntu Server 24.04
 
 # Tipo de instancia y tamaño del disco
-INSTANCE_TYPE="t3.micro"
+INSTANCE_TYPE="t3.medium"
 INSTANCE_TYPE_2="t3.medium"
 VOLUME_SIZE=30
 
